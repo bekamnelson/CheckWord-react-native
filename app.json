@@ -1,10 +1,13 @@
 {
   "expo": {
+    "androidStatusBar": {
+      "hidden": true
+    },
     "name": "CheckWord",
     "slug": "CheckWord",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./image/logo.png",
     "scheme": "checkword",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,23 +17,24 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./image/logo.png",
+        "backgroundImage": "./image/logo.png",
+        "monochromeImage": "./image/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.stratege123456.checkword"
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./image/logo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./image/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -38,11 +42,39 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      "expo-audio",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-5542646175321041~3495157292",
+          "iosAppId": "ca-app-pub-5542646175321041~3495157292"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "ndkVersion": "25.1.8937393",
+            "extraProjectAppIncludes": [],
+            "packagingOptions": {
+              "pickFirst": [
+                "**/libc++_shared.so"
+              ]
+            }
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5c010e99-34aa-4d6d-9f36-0080ab277fb9"
+      }
     }
   }
 }
