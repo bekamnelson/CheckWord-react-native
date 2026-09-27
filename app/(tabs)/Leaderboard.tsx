@@ -13,6 +13,7 @@ import {
 
 import Icon, { IconText } from './../../components/Icon';
 import Ornaments from './../../components/Ornaments';
+import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
@@ -27,13 +28,16 @@ export default function Leaderboard() {
     const { highlight } = useLocalSearchParams<{ highlight?: string }>();
 
     const [scores, setScores] = useState<SurvivalAttempt[]>([]);
+    const [loaded, setLoaded] = useState(false);
     const { decor } = useGameTheme();
     const pal = decor.palette;
     const styles = useMemo(() => makeStyles(pal), [pal]);
 
     useFocusEffect(
         useCallback(() => {
-            loadScores().then(setScores);
+            loadScores()
+                .then(setScores)
+                .finally(() => setLoaded(true));
         }, [])
     );
 
@@ -89,6 +93,9 @@ export default function Leaderboard() {
                     <IconText icon="stopwatch" textStyle={styles.playBtnText}>{t('survie_jouer')}</IconText>
                 </Pressable>
             </ScrollView>
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader ready={loaded} />
         </SafeAreaView>
     );
 }

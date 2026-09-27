@@ -215,10 +215,10 @@
                     "titre": "4. Steigende Schwierigkeit",
                     "texte": "Das Spiel wird immer schwieriger, je länger du überlebst:",
                     "points": [
-                        "Wörter 1 bis 2: Leicht",
-                        "Wörter 3 bis 5: Mittel",
-                        "Wörter 6 bis 9: Schwer",
-                        "Ab dem 10. Wort: Sehr schwer"
+                        "Wörter 1 bis 10: Leicht",
+                        "Wörter 11 bis 20: Mittel",
+                        "Wörter 21 bis 30: Schwer",
+                        "Ab dem 31. Wort: Sehr schwer"
                     ],
                     "note": "Wenn weniger als 20 Sekunden übrig sind, wird die Uhr rot, um dich vor der drohenden Gefahr zu warnen!"
                 },
@@ -240,7 +240,7 @@
     "survie_regle_depart": "Du startest mit {{time}} auf der Uhr",
     "survie_regle_bonus": "Wort gefunden: +{{s}} Sekunden",
     "survie_regle_malus": "Falscher Buchstabe: -{{s}} Sekunden",
-    "survie_regle_difficulte": "Die Wörter werden immer schwieriger",
+    "survie_regle_difficulte": "Die Schwierigkeit steigt alle 10 Wörter",
     "survie_commencer": "Starten",
     "survie_fin": "Zeit abgelaufen!",
     "survie_mots": "Gefundene Wörter",
@@ -300,5 +300,8 @@
     "difficulte_facile": "Leicht",
     "difficulte_moyen": "Mittel",
     "difficulte_difficile": "Schwer",
-    "difficulte_tres_difficile": "Sehr schwer"
+    "difficulte_tres_difficile": "Sehr schwer",
+    "dialog_ok": "Verstanden",
+    "theme_verrouille_progression": "Dein Level: {{current}} / {{total}}",
+    "chargement": "Wird geladen"
 }

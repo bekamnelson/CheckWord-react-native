@@ -13,6 +13,7 @@ import {
 
 import Icon, { IconText } from './../../components/Icon';
 import Ornaments from './../../components/Ornaments';
+import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
@@ -133,6 +134,9 @@ export default function HowToPlay() {
                     </View>
                 ))}
             </ScrollView>
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader />
         </SafeAreaView>
     );
 }

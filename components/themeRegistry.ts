@@ -30,13 +30,13 @@ export interface ThemeConfig {
 // Nom affiché et niveau requis pour chaque thème (un nouveau thème tous les 50 niveaux)
 export const THEME_UNLOCKS = [
     { id: 1, name: 'fantasy', reqLevel: 1 },
-    { id: 2, name: 'SAKURA', reqLevel: 1 },
-    { id: 3, name: 'CYBERPUNK', reqLevel: 1 },
-    { id: 4, name: 'CANDY', reqLevel: 1 },
-    { id: 5, name: 'OCÉAN', reqLevel: 1 },
-    { id: 6, name: 'CRÉPUSCULE', reqLevel: 1 },
-    { id: 7, name: 'LABO', reqLevel: 1 },
-    { id: 8, name: 'RUE', reqLevel: 1 },
+    { id: 2, name: 'SAKURA', reqLevel: 50 },
+    { id: 3, name: 'CYBERPUNK', reqLevel: 100 },
+    { id: 4, name: 'CANDY', reqLevel: 150 },
+    { id: 5, name: 'OCÉAN', reqLevel: 200 },
+    { id: 6, name: 'CRÉPUSCULE', reqLevel: 250 },
+    { id: 7, name: 'LABO', reqLevel: 300 },
+    { id: 8, name: 'RUE', reqLevel: 350 },
 ];
 
 // Thème qui se débloque exactement à ce niveau (ou undefined)
@@ -46,49 +46,49 @@ export const themeUnlockedAt = (level: number) =>
 export const THEMES: Record<number, ThemeConfig> = {
     1: {
         id: 1,
-        backgroundImage: require('./../image/plan1.png'),
+        backgroundImage: require('./../image/plan1.webp'),
         gameStyles: gameTheme1Styles,
         themeStyles: theme1Styles,
     },
     2: {
         id: 2,
-        backgroundImage: require('./../image/plan2.png'),
+        backgroundImage: require('./../image/plan2.webp'),
         gameStyles: gameTheme2Styles,
         themeStyles: theme2Styles,
     },
     3: {
         id: 3,
-        backgroundImage: require('./../image/plan3.png'),
+        backgroundImage: require('./../image/plan3.webp'),
         gameStyles: gameTheme3Styles,
         themeStyles: theme3Styles,
     },
     4: {
         id: 4,
-        backgroundImage: require('./../image/plan4.png'),
+        backgroundImage: require('./../image/plan4.webp'),
         gameStyles: gameTheme4Styles,
         themeStyles: theme4Styles,
     },
     5: {
         id: 5,
-        backgroundImage: require('./../image/plan5.png'),
+        backgroundImage: require('./../image/plan5.webp'),
         gameStyles: gameTheme5Styles,
         themeStyles: theme5Styles,
     },
     6: {
         id: 6,
-        backgroundImage: require('./../image/plan6.png'),
+        backgroundImage: require('./../image/plan6.webp'),
         gameStyles: gameTheme6Styles,
         themeStyles: theme6Styles,
     },
     7: {
         id: 7,
-        backgroundImage: require('./../image/plan7.png'),
+        backgroundImage: require('./../image/plan7.webp'),
         gameStyles: gameTheme7Styles, // À remplacer par gameTheme7Styles
         themeStyles: theme7Styles,     // À remplacer par theme7Styles
     },
     8: {
         id: 8,
-        backgroundImage: require('./../image/plan8.png'),
+        backgroundImage: require('./../image/plan8.webp'),
         gameStyles: gameTheme8Styles, // À remplacer par gameTheme8Styles
         themeStyles: theme8Styles,     // À remplacer par theme8Styles
     },

@@ -3,7 +3,6 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Alert,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -14,8 +13,10 @@ import {
 import Card from './../../components/Card';
 import { IconText } from './../../components/Icon';
 import Ornaments from './../../components/Ornaments';
+import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { THEME_UNLOCKS } from './../../components/themeRegistry';
+import { useDialog } from './../../contexts/DialogContext';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
 
@@ -31,6 +32,7 @@ export default function Theme() {
     const router = useRouter();
     const { t } = useTranslation();
     const { themeId, decor, setThemeId } = useGameTheme();
+    const { showDialog } = useDialog();
     const pal = decor.palette;
     const styles = useMemo(() => makeStyles(pal), [pal]);
     const [player, setPlayer] = useState<PlayerInfo>({
@@ -70,10 +72,16 @@ export default function Theme() {
             // Appliqué instantanément à toute l'application (contexte partagé)
             await setThemeId(planId);
         } else {
-            Alert.alert(
-                t('theme_verrouille_titre'),
-                t('theme_verrouille_msg', { reqLevel })
-            );
+            showDialog({
+                title: t('theme_verrouille_titre'),
+                message: t('theme_verrouille_msg', { reqLevel }),
+                icon: 'lock',
+                progress: {
+                    current: player.level,
+                    total: reqLevel,
+                    label: t('theme_verrouille_progression', { current: player.level, total: reqLevel }),
+                },
+            });
         }
     };
 
@@ -116,6 +124,9 @@ export default function Theme() {
                     </View>
                 </View>
             </ScrollView>
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader />
         </SafeAreaView>
     );
 }

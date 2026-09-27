@@ -20,9 +20,11 @@ import Letter from '../../components/Letter';
 import Player from '../../components/Player';
 import { IconText } from './../../components/Icon';
 import Ornaments from '../../components/Ornaments';
+import Loader from '../../components/Loader';
 import ThemeBackdrop from '../../components/ThemeBackdrop';
 import { useGameTheme } from '../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from '../../themes/decor';
+import { normalizeWord } from '../../utils/normalizeWord';
 
 interface PlayerData {
     nom: string;
@@ -118,20 +120,8 @@ export default function Challenge() {
     // Formate le mot secret
     const handleWord = (text: string) => {
         setRawWord(text);
-        // Accents retir\u00e9s (\u00c9 \u2192 E), sauf les lettres pr\u00e9sentes sur le clavier de la langue :
-        // \u00d1 en espagnol, \u00c4 \u00d6 \u00dc en allemand (\u00df s'\u00e9crit SS en majuscules)
-        const lang = i18n.language?.slice(0, 2);
-        const KEEP: Record<string, string> = { es: '\u00d1', de: '\u00c4\u00d6\u00dc' };
-        const keep = KEEP[lang] ?? '';
-        const placeholders = ['#', '$', '%'];
-        let formatted = text.replace(/\u00df/g, 'SS').toUpperCase();
-        keep.split('').forEach((ch, i) => { formatted = formatted.split(ch).join(placeholders[i]); });
-        formatted = formatted
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^A-Z#$%]/g, '');
-        keep.split('').forEach((ch, i) => { formatted = formatted.split(placeholders[i]).join(ch); });
-        const letters = formatted.split('');
+        // Format du jeu : majuscules sans accents, sauf Ñ (espagnol) et Ä Ö Ü (allemand) ; ß → SS
+        const letters = normalizeWord(text, i18n.language).split('');
         setCheckWord(letters);
         setTrouve(Array(letters.length).fill(''));
     };
@@ -446,6 +436,9 @@ export default function Challenge() {
                     </View>
                 </View>
             </Modal>
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader />
         </SafeAreaView>
     );
 }

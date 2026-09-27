@@ -1,11 +1,11 @@
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as NavigationBar from 'expo-navigation-bar';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import 'react-native-reanimated';
+import { DialogProvider } from '../contexts/DialogContext';
 import { GameThemeProvider } from '../contexts/GameThemeContext';
 import { SoundProvider } from '../contexts/SoundContext';
 import '../i18n';
@@ -37,20 +37,27 @@ export default function RootLayout() {
       .catch(() => setNeedsLanguage(true));
   }, []);
 
+  // Premier lancement : une fois la langue choisie, on présente les modes de jeu.
+  const handleLanguageChosen = () => {
+    setNeedsLanguage(false);
+    router.push('/HowToPlay');
+  };
+
   return (
     <SoundProvider>
       <GameThemeProvider>
+      <DialogProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Stack>
         {/* Décor animé du thème, par-dessus tous les écrans (ne capte aucun toucher) */}
         <ThemeParticles />
         <StatusBar hidden />
         <Sound />
-        <LanguagePicker visible={needsLanguage} onDone={() => setNeedsLanguage(false)} />
+        <LanguagePicker visible={needsLanguage} onDone={handleLanguageChosen} />
       </ThemeProvider>
+      </DialogProvider>
       </GameThemeProvider>
     </SoundProvider>
   );

@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     Animated,
@@ -13,18 +13,20 @@ import {
 } from 'react-native';
 import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 
-import { IconText } from './../../components/Icon';
 import DifficultyBadge, { DIFFICULTY_BADGE_SPACE, borderTopOf } from './../../components/DifficultyBadge';
+import { IconText } from './../../components/Icon';
 import Keyboard from './../../components/Keyboard';
 import Letter from './../../components/Letter';
+import Loader from './../../components/Loader';
 import Ornaments from './../../components/Ornaments';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { useGameTheme } from './../../contexts/GameThemeContext';
-import { ThemePalette, withAlpha } from './../../themes/decor';
 import listWordDe from './../../JSON/liste_mot_de.json';
 import listWordEn from './../../JSON/liste_mot_en.json';
 import listWordEs from './../../JSON/liste_mot_es.json';
 import listWordFr from './../../JSON/liste_mot_fr.json';
+import { ThemePalette, withAlpha } from './../../themes/decor';
+import { tierFor } from './../../utils/difficulty';
 import { formatTime, saveScore } from './../../utils/survivalScores';
 
 interface WordEntry {
@@ -41,11 +43,6 @@ const BONUS_SECONDS = 30;
 const PENALTY_SECONDS = 5;
 const LOW_TIME_SECONDS = 20;
 const NEXT_WORD_DELAY_MS = 700;
-
-// Les mots se durcissent au fil de la partie (found = mots déjà trouvés, le mot en cours est le n° found + 1) :
-// mots 1-2 faciles, 3-5 moyens, 6-9 difficiles, à partir du 10e très difficiles.
-const tierFor = (found: number) =>
-    found < 2 ? 'facile' : found < 5 ? 'moyen' : found < 9 ? 'difficile' : 'tres_difficile';
 
 const IS_CLOSED_TESTING = true;
 const interstitialAdUnitId = (__DEV__ || IS_CLOSED_TESTING)
@@ -95,6 +92,9 @@ export default function Survival() {
     const endedRef = useRef(false);
     const busyRef = useRef(false); // vrai pendant la courte pause après un mot trouvé
     const wordsFoundRef = useRef(0);
+    // Lettres trouvées, toujours à jour : deux touches tapées très vite ne s'écrasent pas
+    const trouveRef = useRef<string[]>([]);
+    const checkWordRef = useRef<string[]>([]);
     const flashAnim = useRef(new Animated.Value(0)).current;
     // Ref (et non state) : endRun est appelé depuis le setInterval et doit lire la valeur à jour
     const adLoadedRef = useRef(false);
@@ -153,8 +153,10 @@ export default function Survival() {
         usedRef.current.add(next);
         const letters = listWord[next].word.split('');
         setWordIndex(next);
+        checkWordRef.current = letters;
+        trouveRef.current = Array(letters.length).fill('');
         setCheckWord(letters);
-        setTrouve(Array(letters.length).fill(''));
+        setTrouve(trouveRef.current);
         busyRef.current = false;
     };
 
@@ -209,15 +211,17 @@ export default function Survival() {
     const handleLetterClick = (lettre: string) => {
         if (phase !== 'playing' || busyRef.current || endedRef.current) return;
 
-        const pos = checkWord.findIndex((l, i) => l === lettre && trouve[i] === '');
+        const current = trouveRef.current;
+        const pos = checkWordRef.current.findIndex((l, i) => l === lettre && current[i] === '');
         if (pos === -1) {
             showFlash(`-${PENALTY_SECONDS}s`, false);
             adjustTime(-PENALTY_SECONDS);
             return;
         }
 
-        const next = [...trouve];
+        const next = [...current];
         next[pos] = lettre;
+        trouveRef.current = next;
         setTrouve(next);
 
         if (next.every((l) => l !== '')) {
@@ -358,6 +362,9 @@ export default function Survival() {
                     </View>
                 </View>
             )}
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader />
         </SafeAreaView>
     );
 }
@@ -369,6 +376,7 @@ const makeLocal = (p: ThemePalette) => StyleSheet.create({
         justifyContent: 'center',
         paddingBottom: 12,
     },
+    // Marges réduites pour laisser de la place au grand clavier
     tight: {
         marginBottom: 16,
     },
@@ -448,6 +456,7 @@ const makeLocal = (p: ThemePalette) => StyleSheet.create({
     },
     secondaryBtnText: {
         color: p.primary,
+
         fontSize: 15,
         fontWeight: '600',
     },

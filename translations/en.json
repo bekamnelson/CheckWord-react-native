@@ -215,10 +215,10 @@
                     "titre": "4. Increasing Difficulty",
                     "texte": "The game gets tougher the longer you survive:",
                     "points": [
-                        "Words 1 to 2: Easy",
-                        "Words 3 to 5: Medium",
-                        "Words 6 to 9: Hard",
-                        "From the 10th word: Very Hard"
+                        "Words 1 to 10: Easy",
+                        "Words 11 to 20: Medium",
+                        "Words 21 to 30: Hard",
+                        "From the 31st word: Very Hard"
                     ],
                     "note": "When the remaining time drops below 20 seconds, the timer turns red to warn you of imminent danger!"
                 },
@@ -240,7 +240,7 @@
     "survie_regle_depart": "You start with {{time}} on the clock",
     "survie_regle_bonus": "Word found: +{{s}} seconds",
     "survie_regle_malus": "Wrong letter: -{{s}} seconds",
-    "survie_regle_difficulte": "Words get harder and harder",
+    "survie_regle_difficulte": "Difficulty rises every 10 words",
     "survie_commencer": "Start",
     "survie_fin": "Time's up!",
     "survie_mots": "Words found",
@@ -300,5 +300,8 @@
     "difficulte_facile": "Easy",
     "difficulte_moyen": "Medium",
     "difficulte_difficile": "Hard",
-    "difficulte_tres_difficile": "Very hard"
+    "difficulte_tres_difficile": "Very hard",
+    "dialog_ok": "Got it",
+    "theme_verrouille_progression": "Your level: {{current}} / {{total}}",
+    "chargement": "Loading"
 }

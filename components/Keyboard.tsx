@@ -2,20 +2,12 @@ import { useAudioPlayer } from 'expo-audio';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native';
+import { layoutFor } from '../utils/keyboardLayouts';
 
 interface KeyboardProps {
     onLetterClick: (letter: string) => void;
     styles: any;
 }
-
-// Disposition des touches par langue : les lettres propres à une langue
-// (Ñ en espagnol, Ä Ö Ü en allemand) n'apparaissent que pour cette langue
-const LAYOUTS: Record<string, string[]> = {
-    fr: 'AZERTYUIOPQSDFGHJKLMWXCVBN'.split(''),
-    en: 'AZERTYUIOPQSDFGHJKLMWXCVBN'.split(''),
-    es: 'QWERTYUIOPASDFGHJKLÑZXCVBNM'.split(''),
-    de: 'QWERTZUIOPÜASDFGHJKLÖÄYXCVBNM'.split(''),
-};
 
 // 6 touches par ligne, assez grandes pour ne pas appuyer à côté
 const KEYS_PER_ROW = 6;
@@ -26,7 +18,7 @@ const KEY_HEIGHT = Math.round(Math.min(56, Math.max(46, Dimensions.get('window')
 export default function Keyboard({ onLetterClick, styles = {} }: KeyboardProps) {
     const player = useAudioPlayer(require('./../sound/tap.mp3'));
     const { i18n } = useTranslation();
-    const ALPHABET = LAYOUTS[i18n.language?.slice(0, 2)] ?? LAYOUTS.fr;
+    const ALPHABET = layoutFor(i18n.language);
     const [rowWidth, setRowWidth] = useState(0);
 
     const handlePress = (item: string) => {
@@ -41,6 +33,7 @@ export default function Keyboard({ onLetterClick, styles = {} }: KeyboardProps) 
 
     return (
         <View
+            testID="keyboard"
             style={[styles.keyboardContainer, local.container]}
             onLayout={(e: LayoutChangeEvent) => setRowWidth(e.nativeEvent.layout.width)}
         >

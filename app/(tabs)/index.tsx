@@ -103,7 +103,7 @@ export default function Acceuil() {
           <View style={styles.titleCard}>
             <View style={styles.logoEmblem}>
               <Image
-                source={require('./../../image/logo.png')}
+                source={require('./../../image/logo.webp')}
                 style={styles.logoImage}
               />
             </View>

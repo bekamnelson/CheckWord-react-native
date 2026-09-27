@@ -38,6 +38,7 @@ function ParticleView({ p, spin }: { p: Particle; spin: boolean }) {
             duration: p.duration,
             easing: Easing.linear,
             useNativeDriver: true,
+            isInteraction: false, // décor : ne retarde jamais le reste de l'app
         });
         // Fin du premier passage (depuis la phase de départ), puis boucle sans aucune pause.
         const first = Animated.timing(progress, {
@@ -45,6 +46,7 @@ function ParticleView({ p, spin }: { p: Particle; spin: boolean }) {
             duration: p.duration * (1 - p.phase),
             easing: Easing.linear,
             useNativeDriver: true,
+            isInteraction: false, // décor : ne retarde jamais le reste de l'app
         });
         const loop = Animated.loop(cycle, { resetBeforeIteration: true });
         let stopped = false;

@@ -16,6 +16,7 @@ import i18n from '../../i18n';
 import { useSound } from '../../contexts/SoundContext';
 import Icon, { IconText } from '../../components/Icon';
 import Ornaments from './../../components/Ornaments';
+import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
@@ -162,6 +163,9 @@ export default function Settings() {
                 </View>
 
             </ScrollView>
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader />
         </SafeAreaView>
     );
 }

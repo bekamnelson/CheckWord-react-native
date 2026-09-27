@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    Alert,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -27,8 +26,10 @@ import Keyboard from './../../components/Keyboard';
 import Letter from './../../components/Letter';
 import LifeBar from './../../components/LifeBar';
 import Ornaments from './../../components/Ornaments';
+import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { themeUnlockedAt } from './../../components/themeRegistry';
+import { useDialog } from './../../contexts/DialogContext';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
 
@@ -115,6 +116,7 @@ export default function GameScreen() {
     const router = useRouter();
     const { t, i18n } = useTranslation();
     const { theme: activeTheme, decor, setThemeId, themeIdRef } = useGameTheme();
+    const { showDialog } = useDialog();
     const localStyles = React.useMemo(() => makeLocalStyles(decor.palette), [decor]);
     const lang = WORD_LISTS[i18n.language?.slice(0, 2)] ? i18n.language.slice(0, 2) : 'fr';
     const { words: listWord, playedKey } = WORD_LISTS[lang];
@@ -266,7 +268,7 @@ export default function GameScreen() {
 
                 } catch (err) {
                     console.error("Erreur lors de l'initialisation du jeu :", err);
-                    Alert.alert(t('game_erreur_titre'), t('game_erreur_msg'));
+                    showDialog({ title: t('game_erreur_titre'), message: t('game_erreur_msg'), icon: 'triangle-exclamation', tone: 'danger' });
                 }
             }
 
@@ -366,7 +368,7 @@ export default function GameScreen() {
             );
             rewarded.show();
         } else {
-            Alert.alert(t('game_video_indispo_titre'), t('game_video_indispo_msg'));
+            showDialog({ title: t('game_video_indispo_titre'), message: t('game_video_indispo_msg'), icon: 'clapperboard' });
             rewarded.load();
         }
     };
@@ -499,7 +501,14 @@ export default function GameScreen() {
         }
     }, [trouve]);
 
-    if (!isLoaded || checkWord.length === 0) return null;
+    // Tant que la partie n'est pas prête : écran de chargement seul (même voile que celui qui s'efface ensuite)
+    if (!isLoaded || checkWord.length === 0) {
+        return (
+            <SafeAreaView style={{ flex: 1 }}>
+                <Loader ready={false} />
+            </SafeAreaView>
+        );
+    }
 
     const styles = activeTheme.gameStyles;
 
@@ -600,6 +609,9 @@ export default function GameScreen() {
                 onCancel={closeAdPrompt}
                 onWatch={handleWatchAd}
             />
+
+            {/* Écran de chargement : s'efface quand la page est prête */}
+            <Loader />
         </SafeAreaView>
     );
 }

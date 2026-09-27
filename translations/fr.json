@@ -215,10 +215,10 @@
                     "titre": "4. Une difficulté croissante (escalade)",
                     "texte": "Le jeu devient de plus en plus corsé au fur et à mesure que vous survivez :",
                     "points": [
-                        "Mots 1 à 2 : difficulté Facile",
-                        "Mots 3 à 5 : difficulté Moyenne",
-                        "Mots 6 à 9 : Difficile",
-                        "À partir du 10e mot : Très Difficile"
+                        "Mots 1 à 10 : difficulté Facile",
+                        "Mots 11 à 20 : difficulté Moyenne",
+                        "Mots 21 à 30 : Difficile",
+                        "À partir du 31e mot : Très Difficile"
                     ],
                     "note": "Quand le temps restant passe sous la barre des 20 secondes, le chronomètre devient rouge pour vous alerter du danger imminent !"
                 },
@@ -240,7 +240,7 @@
     "survie_regle_depart": "Vous commencez avec {{time}} au chrono",
     "survie_regle_bonus": "Mot trouvé : +{{s}} secondes",
     "survie_regle_malus": "Mauvaise lettre : -{{s}} secondes",
-    "survie_regle_difficulte": "Les mots deviennent de plus en plus difficiles",
+    "survie_regle_difficulte": "La difficulté augmente tous les 10 mots",
     "survie_commencer": "Commencer",
     "survie_fin": "Temps écoulé !",
     "survie_mots": "Mots trouvés",
@@ -300,5 +300,8 @@
     "difficulte_facile": "Facile",
     "difficulte_moyen": "Moyen",
     "difficulte_difficile": "Difficile",
-    "difficulte_tres_difficile": "Très difficile"
+    "difficulte_tres_difficile": "Très difficile",
+    "dialog_ok": "Compris",
+    "theme_verrouille_progression": "Ton niveau : {{current}} / {{total}}",
+    "chargement": "Chargement"
 }

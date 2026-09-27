@@ -215,10 +215,10 @@
                     "titre": "4. Una dificultad creciente (escalada)",
                     "texte": "El juego se vuelve cada vez más difícil a medida que sobrevives:",
                     "points": [
-                        "Palabras 1 a 2: dificultad Fácil",
-                        "Palabras 3 a 5: dificultad Media",
-                        "Palabras 6 a 9: Difícil",
-                        "A partir de la 10.ª palabra: Muy Difícil"
+                        "Palabras 1 a 10: dificultad Fácil",
+                        "Palabras 11 a 20: dificultad Media",
+                        "Palabras 21 a 30: Difícil",
+                        "A partir de la 31.ª palabra: Muy Difícil"
                     ],
                     "note": "¡Cuando el tiempo restante baja de 20 segundos, el cronómetro se pone rojo para avisarte del peligro inminente!"
                 },
@@ -240,7 +240,7 @@
     "survie_regle_depart": "Empiezas con {{time}} en el cronómetro",
     "survie_regle_bonus": "Palabra encontrada: +{{s}} segundos",
     "survie_regle_malus": "Letra incorrecta: -{{s}} segundos",
-    "survie_regle_difficulte": "Las palabras son cada vez más difíciles",
+    "survie_regle_difficulte": "La dificultad sube cada 10 palabras",
     "survie_commencer": "Empezar",
     "survie_fin": "¡Se acabó el tiempo!",
     "survie_mots": "Palabras encontradas",
@@ -300,5 +300,8 @@
     "difficulte_facile": "Fácil",
     "difficulte_moyen": "Medio",
     "difficulte_difficile": "Difícil",
-    "difficulte_tres_difficile": "Muy difícil"
+    "difficulte_tres_difficile": "Muy difícil",
+    "dialog_ok": "Entendido",
+    "theme_verrouille_progression": "Tu nivel: {{current}} / {{total}}",
+    "chargement": "Cargando"
 }
