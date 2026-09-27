@@ -1,8 +1,13 @@
-import { useAudioPlayer } from 'expo-audio'; // 1. Import de expo-audio
+import { useAudioPlayer } from 'expo-audio';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { Modal, Pressable, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useGameTheme } from '../contexts/GameThemeContext';
+import { ThemePalette, withAlpha } from '../themes/decor';
+import Icon from './Icon';
+import Ornaments from './Ornaments';
 
 interface BoiteProps {
     visible?: boolean;
@@ -12,6 +17,7 @@ interface BoiteProps {
     word?: string;
     handlereset: () => void;
     styles: any;
+    unlockedTheme?: string | null; // nom du thème débloqué (et appliqué) par cette victoire
 }
 
 export default function Boite({
@@ -22,99 +28,113 @@ export default function Boite({
     word = '',
     handlereset,
     styles = {},
+    unlockedTheme = null,
 }: BoiteProps) {
     const router = useRouter();
-    const [message, setMessage] = useState('');
-    const [annonce, setAnnonce] = useState('');
-    const [etat, setEtat] = useState('');
+    const { t } = useTranslation();
+    const { decor } = useGameTheme();
+    const unlockStyles = React.useMemo(() => makeUnlockStyles(decor.palette), [decor]);
+    const iconColor = hascompleted || haswon ? decor.palette.primary : decor.palette.danger;
 
-    // 2. Initialisation des deux lecteurs audio
-    // N'oublie pas de modifier les chemins pour qu'ils correspondent à tes fichiers !
     const victoryPlayer = useAudioPlayer(require('./../sound/victory.mp3'));
     const defeatPlayer = useAudioPlayer(require('./../sound/defeat.mp3'));
 
     useEffect(() => {
         if (!hascompleted && !haswon) {
-            genererEffetDefaite();
+            try {
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+                defeatPlayer.seekTo(0);
+                defeatPlayer.play();
+            } catch (e) {}
         } else {
-            genererEffetVictoire();
+            try {
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                victoryPlayer.seekTo(0);
+                victoryPlayer.play();
+            } catch (e) {}
         }
+    }, [hascompleted, haswon]);
 
+    const getContent = () => {
         if (haswon && !hascompleted) {
-            setAnnonce('Victoire !');
-            setMessage('Félicitations, vous avez trouvé le mot caché !');
-            setEtat('Niveau suivant');
+            return {
+                annonce: t('boite_victoire'),
+                message: t('boite_victoire_msg'),
+                etat: t('boite_victoire_btn'),
+                showWord: false,
+            };
         } else if (!haswon && !hascompleted) {
-            setAnnonce('Défaite !');
-            setMessage("Désolé, vous avez atteint le nombre d'essais maximal.");
-            setEtat('Réessayer');
+            return {
+                annonce: t('boite_defaite'),
+                message: t('boite_defaite_msg'),
+                etat: t('boite_defaite_btn'),
+                showWord: true,
+            };
         } else if (hascompleted && haswon) {
-            setAnnonce('Fin de la Partie !');
-            setMessage(`Le survivant ultime est ${nom} !`);
-            setEtat('Rejouer');
-        } else if (hascompleted && !haswon) {
-            setAnnonce('Mot Trouvé !');
-            setMessage(`${nom} a trouvé la dernière lettre et devient le nouveau Maître du Jeu !`);
-            setEtat('Manche Suivante');
-        }
-    }, [hascompleted, haswon, nom]);
-
-    const genererEffetVictoire = () => {
-        try {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            // 3. Jouer le son de victoire
-            victoryPlayer.seekTo(0);
-            victoryPlayer.play();
-        } catch (e) {
-            // Ignoré si non supporté
+            return {
+                annonce: t('boite_fin'),
+                message: t('boite_fin_msg', { nom }),
+                etat: t('boite_fin_btn'),
+                showWord: false,
+            };
+        } else {
+            return {
+                annonce: t('boite_mot_trouve'),
+                message: t('boite_mot_trouve_msg', { nom }),
+                etat: t('boite_mot_trouve_btn'),
+                showWord: false,
+            };
         }
     };
 
-    const genererEffetDefaite = () => {
-        try {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-            // 4. Jouer le son de défaite
-            defeatPlayer.seekTo(0);
-            defeatPlayer.play();
-        } catch (e) {
-            // Ignoré si non supporté
-        }
-    };
+    const { annonce, message, etat, showWord } = getContent();
 
     return (
         <Modal visible={visible} transparent animationType="fade">
             <View style={styles.modalOverlay}>
                 <View style={styles.boiteModal}>
-                    <Text style={styles.modalIcon}>
-                        {hascompleted || haswon ? '🏆' : '💀'}
-                    </Text>
+                    <Ornaments />
+                    <Icon
+                        name={hascompleted || haswon ? 'trophy' : 'skull'}
+                        size={48}
+                        color={iconColor}
+                        style={[styles.modalIcon, { color: iconColor }]}
+                    />
 
                     <Text style={styles.modalTitle}>{annonce}</Text>
 
                     <Text style={styles.modalText}>
                         {message}
-                        {'\n'}
-                        {annonce === 'Défaite !' && 'Le mot caché était :\n'}
-                        <Text
-                            style={{
-                                color: '#f0c060',
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                letterSpacing: 4,
-                                textShadowColor: 'rgba(240, 192, 96, 0.5)',
-                                textShadowRadius: 10,
-                            }}
-                        >
-                            {word}
-                        </Text>
+                        {showWord && (
+                            <>
+                                {'\n'}{t('boite_mot_cache')}{'\n'}
+                                <Text style={{
+                                    color: '#f0c060',
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    letterSpacing: 4,
+                                    textShadowColor: 'rgba(240, 192, 96, 0.5)',
+                                    textShadowRadius: 10,
+                                }}>
+                                    {word}
+                                </Text>
+                            </>
+                        )}
                     </Text>
 
+                    {unlockedTheme && (
+                        <View style={unlockStyles.box}>
+                            <Icon name="palette" size={22} color={decor.palette.primary} />
+                            <View style={{ flex: 1 }}>
+                                <Text style={unlockStyles.title}>{t('boite_theme_debloque', { name: unlockedTheme })}</Text>
+                                <Text style={unlockStyles.text}>{t('boite_theme_applique')}</Text>
+                            </View>
+                        </View>
+                    )}
+
                     <View style={styles.modalActions}>
-                        <Pressable
-                            style={styles.btnSecondary}
-                            onPress={() => router.push('/')}
-                        >
-                            <Text style={styles.btnSecondaryText}>Retour</Text>
+                        <Pressable style={styles.btnSecondary} onPress={() => router.push('/')}>
+                            <Text style={styles.btnSecondaryText}>{t('boite_retour')}</Text>
                         </Pressable>
 
                         <Pressable style={styles.btnPrimary} onPress={handlereset}>
@@ -126,3 +146,29 @@ export default function Boite({
         </Modal>
     );
 }
+
+const makeUnlockStyles = (p: ThemePalette) => StyleSheet.create({
+    box: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        alignSelf: 'stretch',
+        backgroundColor: withAlpha(p.primary, 0.12),
+        borderWidth: 1,
+        borderColor: withAlpha(p.primary, 0.6),
+        borderRadius: 12,
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        marginBottom: 14,
+    },
+    title: {
+        color: p.primary,
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    text: {
+        color: p.textMuted,
+        fontSize: 12,
+        marginTop: 2,
+    },
+});

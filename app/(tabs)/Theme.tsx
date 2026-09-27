@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Alert,
-    ImageBackground,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -12,7 +12,12 @@ import {
     View,
 } from 'react-native';
 import Card from './../../components/Card';
-import { THEMES } from './../../components/themeRegistry';
+import { IconText } from './../../components/Icon';
+import Ornaments from './../../components/Ornaments';
+import ThemeBackdrop from './../../components/ThemeBackdrop';
+import { THEME_UNLOCKS } from './../../components/themeRegistry';
+import { useGameTheme } from './../../contexts/GameThemeContext';
+import { ThemePalette, withAlpha } from './../../themes/decor';
 
 interface PlayerInfo {
     level: number;
@@ -20,19 +25,14 @@ interface PlayerInfo {
     game_version: string;
 }
 
-const themesList = [
-    { id: 1, name: 'fantasy', reqLevel: 1 },
-    { id: 2, name: 'SAKURA', reqLevel: 50 },
-    { id: 3, name: 'CYBERPUNK', reqLevel: 100 },
-    { id: 4, name: 'CANDY', reqLevel: 150 },
-    { id: 5, name: 'OCÉAN', reqLevel: 200 },
-    { id: 6, name: 'CRÉPUSCULE', reqLevel: 250 },
-    { id: 7, name: 'LABO', reqLevel: 300 },
-    { id: 8, name: 'RUE', reqLevel: 350 },
-];
+const themesList = THEME_UNLOCKS;
 
 export default function Theme() {
     const router = useRouter();
+    const { t } = useTranslation();
+    const { themeId, decor, setThemeId } = useGameTheme();
+    const pal = decor.palette;
+    const styles = useMemo(() => makeStyles(pal), [pal]);
     const [player, setPlayer] = useState<PlayerInfo>({
         level: 1,
         selectedTheme: 1,
@@ -67,57 +67,37 @@ export default function Theme() {
 
     const handleClick = async (planId: number, reqLevel: number) => {
         if (player.level >= reqLevel) {
-            const newPlayer = { ...player, selectedTheme: planId };
-            setPlayer(newPlayer);
-            try {
-                await AsyncStorage.setItem('player', JSON.stringify(newPlayer));
-            } catch (error) {
-                console.error('Erreur de sauvegarde :', error);
-            }
+            // Appliqué instantanément à toute l'application (contexte partagé)
+            await setThemeId(planId);
         } else {
             Alert.alert(
-                'Thème Verrouillé',
-                `Il faut atteindre le niveau ${reqLevel} pour débloquer ce thème !`
+                t('theme_verrouille_titre'),
+                t('theme_verrouille_msg', { reqLevel })
             );
         }
     };
 
-    const activeTheme = THEMES[player.selectedTheme] || THEMES[1];
-
     return (
         <SafeAreaView style={styles.gameWrap}>
-            {/* Background dynamique mis à jour selon le thème sélectionné */}
-            <ImageBackground
-                source={activeTheme.backgroundImage}
-                style={styles.heroBg}
-                resizeMode="cover"
-            >
-                <View style={styles.heroOverlay} />
-            </ImageBackground>
+            <ThemeBackdrop />
 
             {/* En-tête */}
             <View style={styles.gameHeader}>
                 <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-                    <Text style={styles.backBtnText}>← Retour</Text>
+                    <IconText icon="arrow-left" textStyle={styles.backBtnText}>{t('retour')}</IconText>
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>⚜ Boutique de Thèmes</Text>
+                <IconText icon="palette" textStyle={styles.headerTitle}>{t('theme_titre')}</IconText>
                 <View style={styles.levelIndicator}>
-                    <Text style={styles.levelIndicatorText}>Niveau : {player.level}</Text>
+                    <Text style={styles.levelIndicatorText}>{t('theme_niveau', { level: player.level })}</Text>
                 </View>
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.bigcontainer}>
-                    {/* Ornements d'angle */}
-                    <View style={[styles.ornament, styles.ornamentTL]} />
-                    <View style={[styles.ornament, styles.ornamentTR]} />
-                    <View style={[styles.ornament, styles.ornamentBL]} />
-                    <View style={[styles.ornament, styles.ornamentBR]} />
+                    <Ornaments />
 
-                    <Text style={styles.title}>Choisissez votre Décor</Text>
-                    <Text style={styles.subtitle}>
-                        Un nouveau thème se débloque tous les 50 niveaux !
-                    </Text>
+                    <Text style={styles.title}>{t('theme_choisir')}</Text>
+                    <Text style={styles.subtitle}>{t('theme_deblocage')}</Text>
 
                     {/* Grille 2 cartes par ligne */}
                     <View style={styles.themesGrid}>
@@ -127,7 +107,7 @@ export default function Theme() {
                                 reqLevel={item.reqLevel}
                                 plan={item.id}
                                 isUnlocked={player.level >= item.reqLevel}
-                                isSelected={item.id === player.selectedTheme}
+                                isSelected={item.id === themeId}
                                 name={item.name}
                                 styles={styles}
                                 handleClick={() => handleClick(item.id, item.reqLevel)}
@@ -140,17 +120,11 @@ export default function Theme() {
     );
 }
 
-const styles = StyleSheet.create({
+// Styles calculés à partir de la palette du thème actif
+const makeStyles = (p: ThemePalette) => StyleSheet.create({
     gameWrap: {
         flex: 1,
-        backgroundColor: '#121212',
-    },
-    heroBg: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        backgroundColor: p.bg,
     },
     gameHeader: {
         flexDirection: 'row',
@@ -164,23 +138,23 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     backBtnText: {
-        color: '#ffffff',
+        color: p.text,
         fontSize: 16,
         fontWeight: 'bold',
     },
     headerTitle: {
-        color: '#f0c040',
+        color: p.primary,
         fontSize: 18,
         fontWeight: 'bold',
     },
     levelIndicator: {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: withAlpha(p.primary, 0.12),
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 12,
     },
     levelIndicatorText: {
-        color: '#ffffff',
+        color: p.text,
         fontSize: 13,
         fontWeight: '600',
     },
@@ -193,32 +167,22 @@ const styles = StyleSheet.create({
         maxWidth: 800,
         padding: 12,
         borderRadius: 12,
-        backgroundColor: 'rgba(0, 0, 0, 0.45)',
+        backgroundColor: p.panel,
         position: 'relative',
     },
     title: {
-        color: '#f0c040',
+        color: p.primary,
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 10,
     },
     subtitle: {
-        color: '#ffffff',
+        color: p.text,
         textAlign: 'center',
         marginVertical: 10,
         fontSize: 13,
     },
-    ornament: {
-        position: 'absolute',
-        width: 12,
-        height: 12,
-        borderColor: '#f0c040',
-    },
-    ornamentTL: { top: 6, left: 6, borderTopWidth: 2, borderLeftWidth: 2 },
-    ornamentTR: { top: 6, right: 6, borderTopWidth: 2, borderRightWidth: 2 },
-    ornamentBL: { bottom: 6, left: 6, borderBottomWidth: 2, borderLeftWidth: 2 },
-    ornamentBR: { bottom: 6, right: 6, borderBottomWidth: 2, borderRightWidth: 2 },
 
     // --- Layout 2 cartes par ligne ---
     themesGrid: {
@@ -232,7 +196,7 @@ const styles = StyleSheet.create({
         width: '48%',
         aspectRatio: 0.75,
         borderWidth: 2,
-        borderColor: '#8b7355',
+        borderColor: p.panelBorder,
         borderRadius: 10,
         overflow: 'hidden',
     },
@@ -252,16 +216,16 @@ const styles = StyleSheet.create({
     },
     selected: {
         borderWidth: 3,
-        borderColor: '#00ff00',
-        shadowColor: '#00ff00',
+        borderColor: p.success,
+        shadowColor: p.success,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.9,
         shadowRadius: 10,
         elevation: 8,
     },
     themeName: {
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        color: '#ffffff',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: '#ffffff', // bandeau toujours sombre : texte toujours blanc
         paddingVertical: 5,
         paddingHorizontal: 8,
         borderRadius: 5,

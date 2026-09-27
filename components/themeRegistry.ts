@@ -27,6 +27,22 @@ export interface ThemeConfig {
     themeStyles: Record<string, any>;
 }
 
+// Nom affiché et niveau requis pour chaque thème (un nouveau thème tous les 50 niveaux)
+export const THEME_UNLOCKS = [
+    { id: 1, name: 'fantasy', reqLevel: 1 },
+    { id: 2, name: 'SAKURA', reqLevel: 1 },
+    { id: 3, name: 'CYBERPUNK', reqLevel: 1 },
+    { id: 4, name: 'CANDY', reqLevel: 1 },
+    { id: 5, name: 'OCÉAN', reqLevel: 1 },
+    { id: 6, name: 'CRÉPUSCULE', reqLevel: 1 },
+    { id: 7, name: 'LABO', reqLevel: 1 },
+    { id: 8, name: 'RUE', reqLevel: 1 },
+];
+
+// Thème qui se débloque exactement à ce niveau (ou undefined)
+export const themeUnlockedAt = (level: number) =>
+    THEME_UNLOCKS.find((th) => th.reqLevel === level && th.reqLevel > 1);
+
 export const THEMES: Record<number, ThemeConfig> = {
     1: {
         id: 1,

@@ -19,12 +19,12 @@ export const theme5Styles = StyleSheet.create({
         backgroundColor: theme5Colors.oceanDeep,
     },
     heroBg: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         width: '100%',
         height: '100%',
     },
     heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(6, 21, 57, 0.65)',
     },
     pageWrap: {
@@ -105,7 +105,7 @@ export const theme5Styles = StyleSheet.create({
 
     // ── NOUVEAU : RAYURES DU BOIS ──
     woodStripes: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         borderRadius: 11, // Légèrement moins que le panel pour ne pas déborder
         overflow: 'hidden',
         flexDirection: 'column',

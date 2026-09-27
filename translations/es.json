@@ -1,0 +1,304 @@
+{
+    "sous_titre": "El Desafío de las Palabras Ocultas",
+    "niveau": "Nivel",
+    "bouton_solo": "Solo",
+    "bouton_multi": "Multijugador",
+    "bouton_themes": "Temas",
+    "bouton_survie": "Modo Supervivencia",
+    "bouton_classement": "Clasificación",
+    "citation": "«Cada palabra revelada, una victoria más»",
+    "retour": "Volver",
+    "settings_title": "Ajustes",
+    "settings_sound": "Música de fondo",
+    "settings_sound_on": "Activada",
+    "settings_sound_off": "Desactivada",
+    "settings_language": "Idioma",
+    "settings_about": "Acerca de",
+    "settings_app_name": "CheckWord",
+    "settings_version": "Versión",
+    "settings_description": "Un juego de palabras donde cada letra cuenta. Pon a prueba tu vocabulario, avanza nivel tras nivel y desbloquea nuevos temas.",
+    "settings_back": "Volver",
+    "theme_titre": "Tienda de Temas",
+    "theme_niveau": "Nivel: {{level}}",
+    "theme_choisir": "Elige tu Decorado",
+    "theme_deblocage": "¡Se desbloquea un tema nuevo cada 50 niveles!",
+    "theme_verrouille_titre": "Tema Bloqueado",
+    "theme_verrouille_msg": "¡Alcanza el nivel {{reqLevel}} para desbloquear este tema!",
+    "vies": "Vidas",
+    "game_niveau": "Nivel {{level}}",
+    "game_booster_lettre": "1 Letra",
+    "game_booster_vie": "+1 Vida",
+    "game_booster_mot": "Palabra entera",
+    "game_erreur_titre": "Error",
+    "game_erreur_msg": "No se ha podido cargar tu partida. Por favor, reinicia la aplicación.",
+    "game_video_indispo_titre": "No disponible",
+    "game_video_indispo_msg": "El vídeo aún no está listo, inténtalo de nuevo en un momento.",
+    "aide_titre": "Cómo jugar",
+    "aide_modes": [
+        {
+            "id": "solo",
+            "titre": "Solo",
+            "sections": [
+                {
+                    "titre": "El objetivo del juego",
+                    "texte": "Debes adivinar una palabra misteriosa escondida tras casillas vacías, ayudándote de una pista escrita."
+                },
+                {
+                    "titre": "Cómo jugar (paso a paso)",
+                    "etapes": [
+                        "Lee la pista: en la parte superior de la pantalla aparece una frase o una palabra (por ejemplo: «Animal que maúlla»).",
+                        "Mira las casillas: justo debajo verás casillas vacías. Te indican cuántas letras tiene la palabra misteriosa (ej.: 4 casillas para G-A-T-O).",
+                        {
+                            "texte": "Propón letras: usa el teclado de la parte inferior de la pantalla para escribir una letra.",
+                            "sous": [
+                                {
+                                    "icone": "circle-check",
+                                    "texte": "Si aciertas: la letra aparece en la casilla o casillas correctas."
+                                },
+                                {
+                                    "icone": "circle-xmark",
+                                    "texte": "Si te equivocas: pierdes una vida (un corazón)."
+                                }
+                            ]
+                        },
+                        "Cuidado con tus vidas: empiezas con 5 corazones. Si los pierdes todos antes de encontrar la palabra, ¡Game Over!"
+                    ]
+                },
+                {
+                    "titre": "Ganar y progresar",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "Victoria: si encuentras todas las letras de la palabra, ¡ganas la partida! Consigues 15 monedas de oro y pasas al siguiente nivel."
+                        },
+                        {
+                            "icone": "palette",
+                            "texte": "Temas: cada 50 niveles se desbloquea un tema nuevo que se aplica automáticamente. Puedes cambiar el tema en cualquier momento desde la página Temas."
+                        },
+                        {
+                            "icone": "film",
+                            "texte": "Anuncios: cada 5 partidas jugadas se muestra un pequeño anuncio para apoyar el juego."
+                        }
+                    ]
+                },
+                {
+                    "titre": "Las ayudas (potenciadores)",
+                    "texte": "Si te atascas con una palabra difícil, tienes 3 comodines a tu disposición. Puedes comprarlos con tus monedas de oro o ver un vídeo para usarlos gratis:",
+                    "points": [
+                        {
+                            "icone": "lightbulb",
+                            "texte": "La Bombilla (revelar una letra): cuesta 30 monedas (o 1 anuncio). Coloca automáticamente una letra correcta al azar en la palabra."
+                        },
+                        {
+                            "icone": "heart",
+                            "texte": "El Corazón (vida extra): cuesta 15 monedas (o 1 anuncio). Te da otra oportunidad de equivocarte si casi no te quedan vidas."
+                        },
+                        {
+                            "icone": "eye",
+                            "texte": "El Ojo (revelar la palabra): cuesta 50 monedas (o 2 anuncios). Resuelve la palabra entera al instante y te hace ganar el nivel."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "multi",
+            "titre": "Multijugador",
+            "sections": [
+                {
+                    "titre": "El objetivo del juego",
+                    "texte": "El objetivo es ser el último superviviente. Cada jugador empieza con 5 vidas (representadas por corazones). Si te equivocas demasiado, pierdes todas tus vidas y quedas eliminado. El último jugador con vida gana la partida."
+                },
+                {
+                    "titre": "El principio y el desarrollo",
+                    "texte": "Se juega de 2 a 6 jugadores y se divide en varias «rondas». En cada ronda hay un Maestro del juego y varios Adivinadores."
+                },
+                {
+                    "titre": "1. Configuración (inicio de la partida)",
+                    "points": [
+                        "Elegís el número de jugadores (entre 2 y 6).",
+                        "Cada jugador escribe su apodo.",
+                        "Todos empiezan con 5 vidas. El Jugador 1 es designado como el primer «Maestro»."
+                    ]
+                },
+                {
+                    "titre": "2. La fase del Maestro",
+                    "points": [
+                        "El jugador que es Maestro toma el dispositivo (a escondidas de los demás).",
+                        "Inventa una palabra secreta (sin números ni caracteres especiales) y da una pista (de al menos 5 caracteres) para ayudar a los demás.",
+                        "Una vez validada, pasa el dispositivo a los demás jugadores."
+                    ]
+                },
+                {
+                    "titre": "3. La fase de búsqueda (el juego principal)",
+                    "texte": "Es el turno de los demás jugadores (los «Adivinadores»). En pantalla aparece el nombre del jugador al que le toca. El jugador activo ve la pista y la palabra oculta (en forma de casillas vacías) y debe proponer una letra con el teclado:",
+                    "points": [
+                        {
+                            "icone": "circle-check",
+                            "texte": "Si la letra ESTÁ en la palabra (respuesta correcta): la letra aparece en la palabra. El jugador que la encontró no pierde vida y puede seguir jugando (no pasa el turno)."
+                        },
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "Si la letra NO ESTÁ en la palabra (respuesta incorrecta): el jugador pierde 1 vida. Después le toca al siguiente jugador probar suerte."
+                        },
+                        {
+                            "icone": "skull",
+                            "texte": "Si pierde sus 5 vidas, queda eliminado y se convierte en una calavera."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Fin de una ronda (cambio de Maestro)",
+                    "points": [
+                        "¡El jugador que descubre la última letra de la palabra secreta gana la ronda!",
+                        {
+                            "icone": "crown",
+                            "texte": "Como recompensa, ese jugador se convierte en el nuevo Maestro (obtiene la corona) para la siguiente ronda."
+                        },
+                        "Empieza una nueva ronda: el nuevo Maestro escribe una palabra y una pista nuevas."
+                    ]
+                },
+                {
+                    "titre": "5. Fin de la partida",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "La partida termina cuando solo queda un jugador con vida (los demás han perdido sus 5 vidas). ¡Aparece un cuadro de diálogo para celebrar la victoria del superviviente!"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "survie",
+            "titre": "Supervivencia",
+            "sections": [
+                {
+                    "titre": "El objetivo del juego",
+                    "texte": "El objetivo es sobrevivir el mayor tiempo posible y encontrar el máximo de palabras antes de que el cronómetro llegue a cero."
+                },
+                {
+                    "titre": "El principio y el desarrollo",
+                    "texte": "En este modo, la gestión del tiempo es el corazón del juego. Cada acción tiene una consecuencia directa en tu cronómetro."
+                },
+                {
+                    "titre": "1. El punto de partida",
+                    "points": [
+                        {
+                            "icone": "clock",
+                            "texte": "Empiezas la partida con un cronómetro inicial de 2 minutos (120 segundos)."
+                        }
+                    ]
+                },
+                {
+                    "titre": "2. El juego principal",
+                    "points": [
+                        "En cada turno, el juego elige una palabra al azar de una lista (en francés, inglés, español o alemán, según el idioma del juego) y te da una pista.",
+                        "La palabra está oculta en forma de casillas vacías. Debes usar el teclado para adivinar las letras."
+                    ]
+                },
+                {
+                    "titre": "3. Bonificaciones y penalizaciones (gestión del tiempo)",
+                    "texte": "Cada letra que pulsas afecta a tu supervivencia:",
+                    "points": [
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "Si te equivocas (letra incorrecta): ¡penalización! Se restan 5 segundos al cronómetro de inmediato. Así que evita pulsar al azar."
+                        },
+                        {
+                            "icone": "circle-check",
+                            "texte": "Si completas una palabra: ¡bonificación! Una vez descubierta la última letra, ganas 30 segundos extra en el cronómetro. El juego muestra un pequeño destello verde (+30s) y pasa automáticamente a la siguiente palabra tras una breve pausa."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Una dificultad creciente (escalada)",
+                    "texte": "El juego se vuelve cada vez más difícil a medida que sobrevives:",
+                    "points": [
+                        "Palabras 1 a 2: dificultad Fácil",
+                        "Palabras 3 a 5: dificultad Media",
+                        "Palabras 6 a 9: Difícil",
+                        "A partir de la 10.ª palabra: Muy Difícil"
+                    ],
+                    "note": "¡Cuando el tiempo restante baja de 20 segundos, el cronómetro se pone rojo para avisarte del peligro inminente!"
+                },
+                {
+                    "titre": "5. Fin de la partida y clasificación",
+                    "texte": "La partida se detiene al instante en cuanto el cronómetro llega a 0.",
+                    "points": [
+                        "Aparece una pantalla final con tus estadísticas: el número de palabras encontradas y tu tiempo total de supervivencia.",
+                        {
+                            "icone": "ranking-star",
+                            "texte": "El juego guarda tu puntuación y te indica si has batido un récord o qué posición ocupas en la clasificación general. Después puedes volver a jugar o ver la clasificación."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "survie_titre": "Modo Supervivencia",
+    "survie_regle_depart": "Empiezas con {{time}} en el cronómetro",
+    "survie_regle_bonus": "Palabra encontrada: +{{s}} segundos",
+    "survie_regle_malus": "Letra incorrecta: -{{s}} segundos",
+    "survie_regle_difficulte": "Las palabras son cada vez más difíciles",
+    "survie_commencer": "Empezar",
+    "survie_fin": "¡Se acabó el tiempo!",
+    "survie_mots": "Palabras encontradas",
+    "survie_duree": "Tiempo sobrevivido",
+    "survie_record": "¡Nuevo récord!",
+    "survie_rang": "Puesto {{rank}} en la clasificación",
+    "survie_hors_classement": "No es suficiente para entrar en el top 10… ¡Inténtalo de nuevo!",
+    "survie_rejouer": "Jugar de nuevo",
+    "survie_jouer": "Jugar en modo supervivencia",
+    "survie_classement": "Clasificación",
+    "survie_classement_sous_titre": "Tus {{count}} mejores intentos en modo supervivencia",
+    "survie_classement_vide": "Todavía no hay partidas.\n¡Juega al modo supervivencia para registrar tu primera puntuación!",
+    "survie_mots_count_one": "{{count}} palabra encontrada",
+    "survie_mots_count_other": "{{count}} palabras encontradas",
+    "survie_nouveau": "NUEVO",
+    "challenge_mode": "Desafío Multijugador",
+    "challenge_config": "Configuración",
+    "challenge_nb_joueurs": "¿Cuántos jugadores participan? (2 - 6)",
+    "challenge_suivant": "Siguiente",
+    "challenge_valider": "Confirmar jugadores",
+    "challenge_phase_maitre": "Fase del Maestro",
+    "challenge_tour_maitre": "¡Le toca a {{nom}} elegir una palabra!",
+    "challenge_mot_secret": "Palabra secreta",
+    "challenge_indice_placeholder": "Pista de la palabra",
+    "challenge_lancer": "Empezar la partida",
+    "challenge_tour": "Turno de: {{nom}}",
+    "challenge_attention": "Atención",
+    "challenge_compris": "Entendido",
+    "challenge_erreur_mot": "La palabra solo puede contener letras y no puede estar vacía.",
+    "challenge_erreur_indice": "La pista debe tener al menos 5 caracteres.",
+    "boite_victoire": "¡Victoria!",
+    "boite_victoire_msg": "¡Enhorabuena, has encontrado la palabra oculta!",
+    "boite_victoire_btn": "Siguiente nivel",
+    "boite_defaite": "¡Derrota!",
+    "boite_defaite_msg": "Lo siento, has alcanzado el número máximo de intentos.",
+    "boite_defaite_btn": "Reintentar",
+    "boite_mot_cache": "La palabra oculta era:",
+    "boite_fin": "¡Fin de la Partida!",
+    "boite_fin_msg": "¡El superviviente definitivo es {{nom}}!",
+    "boite_fin_btn": "Jugar de nuevo",
+    "boite_mot_trouve": "¡Palabra Encontrada!",
+    "boite_mot_trouve_msg": "¡{{nom}} ha encontrado la última letra y se convierte en el nuevo Maestro del Juego!",
+    "boite_mot_trouve_btn": "Siguiente Ronda",
+    "boite_retour": "Volver",
+    "boite_theme_debloque": "¡Nuevo tema desbloqueado: {{name}}!",
+    "boite_theme_applique": "Se ha aplicado automáticamente. Puedes cambiarlo en cualquier momento desde la página Temas.",
+    "ad_encore": "¡Un vídeo más!",
+    "ad_indisponible": "Potenciador no disponible",
+    "ad_plus_une": "¡Solo un vídeo más para desbloquear «{{name}}»!",
+    "ad_pas_pieces": "No tienes suficientes monedas para usar «{{name}}».\n{{info}}",
+    "ad_multi_videos": "¡Mira {{count}} vídeos cortos para conseguirlo gratis!",
+    "ad_une_video": "¡Mira un vídeo corto para conseguirlo gratis!",
+    "ad_progression": "Vídeo {{current}}/{{total}}",
+    "ad_regarder_multi": "Ver el vídeo {{current}}/{{total}}",
+    "ad_regarder": "Ver el anuncio",
+    "ad_annuler": "Cancelar",
+    "difficulte_facile": "Fácil",
+    "difficulte_moyen": "Medio",
+    "difficulte_difficile": "Difícil",
+    "difficulte_tres_difficile": "Muy difícil"
+}

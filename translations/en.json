@@ -1,0 +1,304 @@
+{
+    "sous_titre": "The Hidden Words Challenge",
+    "niveau": "Level",
+    "bouton_solo": "Solo",
+    "bouton_multi": "Multiplayer",
+    "bouton_themes": "Themes",
+    "bouton_survie": "Survival Mode",
+    "bouton_classement": "Leaderboard",
+    "citation": "\"Every revealed word is another victory\"",
+    "retour": "Back",
+    "settings_title": "Settings",
+    "settings_sound": "Background Music",
+    "settings_sound_on": "Enabled",
+    "settings_sound_off": "Disabled",
+    "settings_language": "Language",
+    "settings_about": "About",
+    "settings_app_name": "CheckWord",
+    "settings_version": "Version",
+    "settings_description": "A word game where every letter counts. Test your vocabulary, progress level by level and unlock new themes.",
+    "settings_back": "Back",
+    "theme_titre": "Theme Shop",
+    "theme_niveau": "Level: {{level}}",
+    "theme_choisir": "Choose Your Background",
+    "theme_deblocage": "A new theme unlocks every 50 levels!",
+    "theme_verrouille_titre": "Theme Locked",
+    "theme_verrouille_msg": "Reach level {{reqLevel}} to unlock this theme!",
+    "vies": "Lives",
+    "game_niveau": "Level {{level}}",
+    "game_booster_lettre": "1 Letter",
+    "game_booster_vie": "+1 Life",
+    "game_booster_mot": "Full Word",
+    "game_erreur_titre": "Error",
+    "game_erreur_msg": "Unable to load your game. Please restart the app.",
+    "game_video_indispo_titre": "Unavailable",
+    "game_video_indispo_msg": "The video is not ready yet, try again in a moment.",
+    "aide_titre": "How to Play",
+    "aide_modes": [
+        {
+            "id": "solo",
+            "titre": "Solo",
+            "sections": [
+                {
+                    "titre": "The Goal",
+                    "texte": "You must guess a mystery word hidden behind empty boxes, with the help of a text hint."
+                },
+                {
+                    "titre": "How to Play (step by step)",
+                    "etapes": [
+                        "Read the hint: at the top of the screen, you are given a sentence or a word (for example: \"Animal that meows\").",
+                        "Look at the boxes: just below, you see empty boxes. They tell you how many letters the mystery word has (e.g. 3 boxes for C-A-T).",
+                        {
+                            "texte": "Guess letters: use the keyboard at the bottom of the screen to type a letter.",
+                            "sous": [
+                                {
+                                    "icone": "circle-check",
+                                    "texte": "If you're right: the letter appears in the right box(es)."
+                                },
+                                {
+                                    "icone": "circle-xmark",
+                                    "texte": "If you're wrong: you lose a life (a heart)."
+                                }
+                            ]
+                        },
+                        "Watch your lives: you start with 5 hearts. If you lose all your hearts before finding the word, it's Game Over!"
+                    ]
+                },
+                {
+                    "titre": "Winning and Progressing",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "Victory: if you find all the letters of the word, you win the game! You earn 15 gold coins and move up to the next level."
+                        },
+                        {
+                            "icone": "palette",
+                            "texte": "Themes: every 50 levels, a new theme unlocks and is applied automatically. You can change the theme at any time from the Themes page."
+                        },
+                        {
+                            "icone": "film",
+                            "texte": "Ads: every 5 games played, a short ad is shown to support the game."
+                        }
+                    ]
+                },
+                {
+                    "titre": "Power-ups (Boosters)",
+                    "texte": "If you're stuck on a hard word, you have 3 jokers at your disposal. You can buy them with your gold coins, or watch a video to use them for free:",
+                    "points": [
+                        {
+                            "icone": "lightbulb",
+                            "texte": "The Bulb (reveal a letter): costs 30 coins (or 1 ad). Automatically places a correct letter at random in the word."
+                        },
+                        {
+                            "icone": "heart",
+                            "texte": "The Heart (extra life): costs 15 coins (or 1 ad). Gives you another chance to make a mistake when you're almost out of lives."
+                        },
+                        {
+                            "icone": "eye",
+                            "texte": "The Eye (reveal the word): costs 50 coins (or 2 ads). Solves the whole word instantly and wins you the level!"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "multi",
+            "titre": "Multiplayer",
+            "sections": [
+                {
+                    "titre": "The Goal",
+                    "texte": "The goal is to be the last survivor. Each player starts with 5 lives (shown as hearts). If you make too many mistakes, you lose all your lives and are eliminated. The last player alive wins the game."
+                },
+                {
+                    "titre": "How It Works",
+                    "texte": "The game is played by 2 to 6 players and is divided into several \"rounds\". In each round, there is a Game Master and Guessers."
+                },
+                {
+                    "titre": "1. Setup (start of the game)",
+                    "points": [
+                        "Choose the number of players (between 2 and 6).",
+                        "Each player enters a nickname.",
+                        "Everyone starts with 5 lives. Player 1 is designated as the first \"Master\"."
+                    ]
+                },
+                {
+                    "titre": "2. The Master Phase",
+                    "points": [
+                        "The player who is the Master takes the device (out of sight of the others).",
+                        "They make up a secret word (no numbers or special characters) and give a hint (at least 5 characters long) to help the others.",
+                        "Once confirmed, they hand the device to the other players."
+                    ]
+                },
+                {
+                    "titre": "3. The Search Phase (main game)",
+                    "texte": "Now it's the other players' turn (the \"Guessers\"). The name of the player whose turn it is appears on screen. The active player sees the hint and the hidden word (as empty boxes), and must guess a letter using the keyboard:",
+                    "points": [
+                        {
+                            "icone": "circle-check",
+                            "texte": "If the letter IS in the word (right answer): the letter appears in the word. The player who found it doesn't lose a life and keeps playing (the turn doesn't pass)."
+                        },
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "If the letter is NOT in the word (wrong answer): the player loses 1 life. Then it's the next player's turn to try their luck."
+                        },
+                        {
+                            "icone": "skull",
+                            "texte": "A player who loses all 5 lives is eliminated and turned into a skull."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. End of a Round (new Master)",
+                    "points": [
+                        "The player who uncovers the very last letter of the secret word wins the round!",
+                        {
+                            "icone": "crown",
+                            "texte": "As a reward, that player becomes the new Master (they get the crown) for the next round."
+                        },
+                        "A new round begins: the new Master types a new word and a new hint."
+                    ]
+                },
+                {
+                    "titre": "5. End of the Game",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "The game ends when only one player is left alive (the others have lost their 5 lives). A dialog appears to celebrate the survivor's victory!"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "survie",
+            "titre": "Survival",
+            "sections": [
+                {
+                    "titre": "The Goal",
+                    "texte": "The goal is to survive as long as possible and find as many words as you can before the timer hits zero."
+                },
+                {
+                    "titre": "How It Works",
+                    "texte": "In this mode, time management is at the heart of the game. Every action has a direct effect on your timer."
+                },
+                {
+                    "titre": "1. The Starting Point",
+                    "points": [
+                        {
+                            "icone": "clock",
+                            "texte": "You start the game with an initial timer of 2 minutes (120 seconds)."
+                        }
+                    ]
+                },
+                {
+                    "titre": "2. The Main Game",
+                    "points": [
+                        "Each turn, the game picks a random word from a list (in French, English, Spanish or German, depending on the game language) and gives you a hint.",
+                        "The word is hidden as empty boxes. Use the keyboard to guess the letters."
+                    ]
+                },
+                {
+                    "titre": "3. Bonuses and Penalties (time management)",
+                    "texte": "Every letter you tap affects your survival:",
+                    "points": [
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "If you're wrong (wrong letter): penalty! 5 seconds are immediately taken off the timer. So avoid tapping at random."
+                        },
+                        {
+                            "icone": "circle-check",
+                            "texte": "If you complete a word: bonus! Once the last letter of the word is found, you gain 30 extra seconds on the timer. The game shows a small green flash (+30s) and automatically moves on to the next word after a very short pause."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Increasing Difficulty",
+                    "texte": "The game gets tougher the longer you survive:",
+                    "points": [
+                        "Words 1 to 2: Easy",
+                        "Words 3 to 5: Medium",
+                        "Words 6 to 9: Hard",
+                        "From the 10th word: Very Hard"
+                    ],
+                    "note": "When the remaining time drops below 20 seconds, the timer turns red to warn you of imminent danger!"
+                },
+                {
+                    "titre": "5. End of the Game and Leaderboard",
+                    "texte": "The game stops instantly as soon as the timer reaches 0.",
+                    "points": [
+                        "An end screen shows your stats: the number of words found and your total survival time.",
+                        {
+                            "icone": "ranking-star",
+                            "texte": "The game saves your score and tells you whether you set a record or what your position is on the leaderboard. You can then play again or go and see the leaderboard."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "survie_titre": "Survival Mode",
+    "survie_regle_depart": "You start with {{time}} on the clock",
+    "survie_regle_bonus": "Word found: +{{s}} seconds",
+    "survie_regle_malus": "Wrong letter: -{{s}} seconds",
+    "survie_regle_difficulte": "Words get harder and harder",
+    "survie_commencer": "Start",
+    "survie_fin": "Time's up!",
+    "survie_mots": "Words found",
+    "survie_duree": "Time survived",
+    "survie_record": "New record!",
+    "survie_rang": "#{{rank}} on the leaderboard",
+    "survie_hors_classement": "Not enough to reach the top 10… Try again!",
+    "survie_rejouer": "Play Again",
+    "survie_jouer": "Play Survival Mode",
+    "survie_classement": "Leaderboard",
+    "survie_classement_sous_titre": "Your {{count}} best Survival Mode runs",
+    "survie_classement_vide": "No runs yet.\nPlay Survival Mode to set your first score!",
+    "survie_mots_count_one": "{{count}} word found",
+    "survie_mots_count_other": "{{count}} words found",
+    "survie_nouveau": "NEW",
+    "challenge_mode": "Multiplayer Challenge",
+    "challenge_config": "Configuration",
+    "challenge_nb_joueurs": "How many players? (2 - 6)",
+    "challenge_suivant": "Next",
+    "challenge_valider": "Confirm Players",
+    "challenge_phase_maitre": "Master Phase",
+    "challenge_tour_maitre": "It's {{nom}}'s turn to choose a word!",
+    "challenge_mot_secret": "Secret word",
+    "challenge_indice_placeholder": "Word hint",
+    "challenge_lancer": "Start Game",
+    "challenge_tour": "Turn: {{nom}}",
+    "challenge_attention": "Warning",
+    "challenge_compris": "Got it",
+    "challenge_erreur_mot": "The word must contain only letters and cannot be empty.",
+    "challenge_erreur_indice": "The hint must be at least 5 characters long.",
+    "boite_victoire": "Victory!",
+    "boite_victoire_msg": "Congratulations, you found the hidden word!",
+    "boite_victoire_btn": "Next Level",
+    "boite_defaite": "Defeat!",
+    "boite_defaite_msg": "Sorry, you've used all your attempts.",
+    "boite_defaite_btn": "Try Again",
+    "boite_mot_cache": "The hidden word was:",
+    "boite_fin": "Game Over!",
+    "boite_fin_msg": "The ultimate survivor is {{nom}}!",
+    "boite_fin_btn": "Play Again",
+    "boite_mot_trouve": "Word Found!",
+    "boite_mot_trouve_msg": "{{nom}} found the last letter and becomes the new Game Master!",
+    "boite_mot_trouve_btn": "Next Round",
+    "boite_retour": "Back",
+    "boite_theme_debloque": "New theme unlocked: {{name}}!",
+    "boite_theme_applique": "It has been applied automatically. You can change it anytime from the Themes page.",
+    "ad_encore": "One more video!",
+    "ad_indisponible": "Booster unavailable",
+    "ad_plus_une": "One more video to unlock « {{name}} »!",
+    "ad_pas_pieces": "You don't have enough coins to use « {{name}} ».\n{{info}}",
+    "ad_multi_videos": "Watch {{count}} short videos to get it for free!",
+    "ad_une_video": "Watch a short video to get it for free!",
+    "ad_progression": "Video {{current}}/{{total}}",
+    "ad_regarder_multi": "Watch video {{current}}/{{total}}",
+    "ad_regarder": "Watch the ad",
+    "ad_annuler": "Cancel",
+    "difficulte_facile": "Easy",
+    "difficulte_moyen": "Medium",
+    "difficulte_difficile": "Hard",
+    "difficulte_tres_difficile": "Very hard"
+}

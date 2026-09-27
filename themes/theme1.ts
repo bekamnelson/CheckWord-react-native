@@ -31,12 +31,12 @@ export const theme1Styles = StyleSheet.create({
 
     // .hero-bg & .hero-overlay
     heroBg: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         width: '100%',
         height: '100%',
     },
     heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(10, 15, 30, 0.65)',
     },
 

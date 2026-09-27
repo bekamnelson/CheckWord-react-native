@@ -21,12 +21,12 @@ export const theme4Styles = StyleSheet.create({
         backgroundColor: theme4Colors.candyLight,
     },
     heroBg: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         width: '100%',
         height: '100%',
     },
     heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(255, 107, 158, 0.35)',
     },
     pageWrap: {

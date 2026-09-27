@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
-    ImageBackground,
     Modal,
     SafeAreaView,
     ScrollView,
@@ -19,7 +18,11 @@ import Input from '../../components/Input';
 import Keyboard from '../../components/Keyboard';
 import Letter from '../../components/Letter';
 import Player from '../../components/Player';
-import { THEMES } from '../../components/themeRegistry';
+import { IconText } from './../../components/Icon';
+import Ornaments from '../../components/Ornaments';
+import ThemeBackdrop from '../../components/ThemeBackdrop';
+import { useGameTheme } from '../../contexts/GameThemeContext';
+import { ThemePalette, withAlpha } from '../../themes/decor';
 
 interface PlayerData {
     nom: string;
@@ -29,7 +32,10 @@ interface PlayerData {
 
 export default function Challenge() {
     const router = useRouter();
-    const [selectedTheme, setSelectedTheme] = useState<number>(1);
+    const { t, i18n } = useTranslation();
+    const { theme: activeTheme, decor } = useGameTheme();
+    const pal = decor.palette;
+    const styles = useMemo(() => makeStyles(pal), [pal]);
     const [nbPlayers, setNbPlayers] = useState<number>(2);
     const [players, setPlayers] = useState<PlayerData[]>([
         { nom: 'Joueur 1', life: 5, active: true },
@@ -66,19 +72,6 @@ export default function Challenge() {
             setCheckWord([]);
             setTrouve([]);
             setErrorModalVisible(false);
-
-            const loadTheme = async () => {
-                try {
-                    const savedPlayer = await AsyncStorage.getItem('player');
-                    if (savedPlayer) {
-                        const parsed = JSON.parse(savedPlayer);
-                        if (parsed.selectedTheme) setSelectedTheme(parsed.selectedTheme);
-                    }
-                } catch (error) {
-                    console.error('Erreur de chargement du thème :', error);
-                }
-            };
-            loadTheme();
         }, [])
     );
 
@@ -125,11 +118,19 @@ export default function Challenge() {
     // Formate le mot secret
     const handleWord = (text: string) => {
         setRawWord(text);
-        const formatted = text
-            .toUpperCase()
+        // Accents retir\u00e9s (\u00c9 \u2192 E), sauf les lettres pr\u00e9sentes sur le clavier de la langue :
+        // \u00d1 en espagnol, \u00c4 \u00d6 \u00dc en allemand (\u00df s'\u00e9crit SS en majuscules)
+        const lang = i18n.language?.slice(0, 2);
+        const KEEP: Record<string, string> = { es: '\u00d1', de: '\u00c4\u00d6\u00dc' };
+        const keep = KEEP[lang] ?? '';
+        const placeholders = ['#', '$', '%'];
+        let formatted = text.replace(/\u00df/g, 'SS').toUpperCase();
+        keep.split('').forEach((ch, i) => { formatted = formatted.split(ch).join(placeholders[i]); });
+        formatted = formatted
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^A-Z]/g, '');
+            .replace(/[^A-Z#$%]/g, '');
+        keep.split('').forEach((ch, i) => { formatted = formatted.split(placeholders[i]).join(ch); });
         const letters = formatted.split('');
         setCheckWord(letters);
         setTrouve(Array(letters.length).fill(''));
@@ -141,10 +142,10 @@ export default function Challenge() {
         const wordRegex = /^[a-zA-ZÀ-ÿ]+$/;
 
         if (!rawWord || !wordRegex.test(rawWord)) {
-            errors.push("Le mot ne doit contenir que des lettres et ne pas être vide.");
+            errors.push(t('challenge_erreur_mot'));
         }
         if (!indice || indice.trim().length < 5) {
-            errors.push("L'indice doit comporter au moins 5 caractères.");
+            errors.push(t('challenge_erreur_indice'));
         }
 
         if (errors.length > 0) {
@@ -247,28 +248,25 @@ export default function Challenge() {
     };
 
     // Styles dynamiques du thème
-    const activeTheme = THEMES[selectedTheme] || THEMES[1];
     const themeStyles = activeTheme.gameStyles;
-    const primaryTextColor = themeStyles?.headerTitle?.color || '#f0c040';
-    const secondaryTextColor = themeStyles?.contenuedescription?.color || '#ffffff';
-    const borderColor = themeStyles?.ornament?.borderColor || primaryTextColor;
+    const primaryTextColor = pal.primary;
+    const secondaryTextColor = pal.text;
+    const borderColor = pal.primary;
 
     const styles2 = activeTheme.gameStyles;
 
     return (
         <SafeAreaView style={styles.gameWrap}>
-            <ImageBackground source={activeTheme.backgroundImage} style={styles.heroBg} resizeMode="cover">
-                <View style={styles.heroOverlay} />
-            </ImageBackground>
+            <ThemeBackdrop />
 
             {/* En-tête */}
             <View style={styles.gameHeader}>
                 <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-                    <Text style={[styles.backBtnText, { color: secondaryTextColor }]}>← Retour</Text>
+                    <IconText icon="arrow-left" textStyle={[styles.backBtnText, { color: secondaryTextColor }]}>{t('retour')}</IconText>
                 </TouchableOpacity>
-                <Text style={[styles.headerTitle, { color: primaryTextColor }]}>⚜ CheckWord</Text>
+                <IconText icon="crown" textStyle={[styles.headerTitle, { color: primaryTextColor }]}>CheckWord</IconText>
                 <View style={styles.levelIndicator}>
-                    <Text style={[styles.levelIndicatorText, { color: secondaryTextColor }]}>Mode Survie</Text>
+                    <Text style={[styles.levelIndicatorText, { color: secondaryTextColor }]}>{t('challenge_mode')}</Text>
                 </View>
             </View>
 
@@ -276,17 +274,14 @@ export default function Challenge() {
                 {/* ÉCRAN 1 : CONFIGURATION */}
                 {step < 2 && (
                     <View style={styles.bigcontainer}>
-                        <View style={[styles.ornament, styles.ornamentTL, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentTR, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentBL, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentBR, { borderColor }]} />
+                        <Ornaments />
 
-                        <Text style={[styles.title, { color: primaryTextColor }]}>Configuration</Text>
+                        <Text style={[styles.title, { color: primaryTextColor }]}>{t('challenge_config')}</Text>
 
                         {step === 0 && (
                             <View style={styles.stepBoxCentered}>
                                 <Text style={[styles.labelCentered, { color: secondaryTextColor }]}>
-                                    Combien de joueurs participent ? (2 - 6)
+                                    {t('challenge_nb_joueurs')}
                                 </Text>
                                 <TextInput
                                     style={[styles.inputGoldCentered, { color: primaryTextColor, borderColor }]}
@@ -295,7 +290,7 @@ export default function Challenge() {
                                     onChangeText={handlePlayerNbChange}
                                 />
                                 <TouchableOpacity style={styles.btnPrimary} onPress={() => setStep(1)}>
-                                    <Text style={styles.btnText}>Suivant</Text>
+                                    <Text style={styles.btnText}>{t('challenge_suivant')}</Text>
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -319,7 +314,7 @@ export default function Challenge() {
                                         setStep(2);
                                     }}
                                 >
-                                    <Text style={styles.btnText}>Valider les joueurs</Text>
+                                    <Text style={styles.btnText}>{t('challenge_valider')}</Text>
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -329,33 +324,30 @@ export default function Challenge() {
                 {/* ÉCRAN 2 : PHASE DU MAÎTRE */}
                 {step === 2 && (
                     <View style={styles.bigcontainer}>
-                        <View style={[styles.ornament, styles.ornamentTL, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentTR, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentBL, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentBR, { borderColor }]} />
+                        <Ornaments />
 
-                        <Text style={[styles.title, { color: primaryTextColor }]}>Phase du Maître</Text>
+                        <Text style={[styles.title, { color: primaryTextColor }]}>{t('challenge_phase_maitre')}</Text>
                         <Text style={[styles.subtitle, { color: secondaryTextColor }]}>
-                            C'est au tour de <Text style={{ fontWeight: 'bold', color: primaryTextColor }}>{players[currentMaster]?.nom}</Text> de choisir un mot !
+                            {t('challenge_tour_maitre', { nom: players[currentMaster]?.nom })}
                         </Text>
 
                         <View style={styles.stepBox}>
                             <TextInput
                                 style={[styles.inputGold, { color: primaryTextColor, borderColor }]}
-                                placeholder="Mot secret"
-                                placeholderTextColor="rgba(255,255,255,0.5)"
+                                placeholder={t('challenge_mot_secret')}
+                                placeholderTextColor={withAlpha(pal.textMuted, 0.7)}
                                 secureTextEntry
                                 onChangeText={handleWord}
                             />
                             <TextInput
                                 style={[styles.inputGold, { color: primaryTextColor, borderColor }]}
-                                placeholder="Indice du mot"
-                                placeholderTextColor="rgba(255,255,255,0.5)"
+                                placeholder={t('challenge_indice_placeholder')}
+                                placeholderTextColor={withAlpha(pal.textMuted, 0.7)}
                                 value={indice}
                                 onChangeText={setIndice}
                             />
                             <TouchableOpacity style={styles.btnPrimary} onPress={handleStartGame}>
-                                <Text style={styles.btnText}>Lancer la partie</Text>
+                                <Text style={styles.btnText}>{t('challenge_lancer')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -365,14 +357,11 @@ export default function Challenge() {
                 {step === 3 && (
                     <View style={styles.gameScreen}>
                         <Text style={[styles.tourIndicator, { color: primaryTextColor }]}>
-                            Tour de : {players[currentPlayer]?.nom}
+                            {t('challenge_tour', { nom: players[currentPlayer]?.nom })}
                         </Text>
 
                         <View style={styles.bigcontainer}>
-                            <View style={[styles.ornament, styles.ornamentTL, { borderColor }]} />
-                            <View style={[styles.ornament, styles.ornamentTR, { borderColor }]} />
-                            <View style={[styles.ornament, styles.ornamentBL, { borderColor }]} />
-                            <View style={[styles.ornament, styles.ornamentBR, { borderColor }]} />
+                            <Ornaments />
 
                             {/* Indice */}
                             <Text style={[styles.contenuedescription, { color: secondaryTextColor }]}>
@@ -395,7 +384,7 @@ export default function Challenge() {
                         {/* Cartes des Joueurs */}
                         <View style={styles.containtplayers}>
                             {players.map((item, i) => {
-                                const icone = !item.active ? '💀' : i === currentMaster ? '👑' : '👤';
+                                const icone = !item.active ? 'skull' : i === currentMaster ? 'crown' : 'user';
                                 return (
                                     <Player
                                         key={`player-${i}`}
@@ -443,19 +432,16 @@ export default function Challenge() {
             >
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalContainer, { borderColor }]}>
-                        <View style={[styles.ornament, styles.ornamentTL, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentTR, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentBL, { borderColor }]} />
-                        <View style={[styles.ornament, styles.ornamentBR, { borderColor }]} />
+                        <Ornaments />
 
-                        <Text style={[styles.modalTitle, { color: primaryTextColor }]}>⚠️ Attention</Text>
+                        <IconText icon="triangle-exclamation" textStyle={[styles.modalTitle, { color: primaryTextColor }]}>{t('challenge_attention')}</IconText>
                         <Text style={[styles.modalMessage, { color: secondaryTextColor }]}>{errorMessage}</Text>
 
                         <TouchableOpacity
                             style={styles.btnPrimary}
                             onPress={() => setErrorModalVisible(false)}
                         >
-                            <Text style={styles.btnText}>Compris</Text>
+                            <Text style={styles.btnText}>{t('challenge_compris')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -464,17 +450,11 @@ export default function Challenge() {
     );
 }
 
-const styles = StyleSheet.create({
+// Styles calculés à partir de la palette du thème actif
+const makeStyles = (p: ThemePalette) => StyleSheet.create({
     gameWrap: {
         flex: 1,
-        backgroundColor: '#121212',
-    },
-    heroBg: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        backgroundColor: p.bg,
     },
     gameHeader: {
         flexDirection: 'row',
@@ -496,7 +476,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     levelIndicator: {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: withAlpha(p.primary, 0.12),
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 12,
@@ -514,7 +494,7 @@ const styles = StyleSheet.create({
         maxWidth: 800,
         padding: 16,
         borderRadius: 12,
-        backgroundColor: 'rgba(0, 0, 0, 0.55)',
+        backgroundColor: p.panel,
         position: 'relative',
         alignItems: 'center',
     },
@@ -557,7 +537,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 14,
         fontSize: 15,
         fontWeight: '600',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        backgroundColor: withAlpha(p.bg, 0.5),
     },
     inputGoldCentered: {
         width: '50%',
@@ -569,10 +549,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        backgroundColor: withAlpha(p.bg, 0.5),
     },
     btnPrimary: {
-        backgroundColor: '#f0c040',
+        backgroundColor: p.primary,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 8,
@@ -581,7 +561,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnText: {
-        color: '#000',
+        color: p.onPrimary,
         fontWeight: 'bold',
         fontSize: 16,
     },
@@ -623,20 +603,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '100%',
     },
-    ornament: {
-        position: 'absolute',
-        width: 12,
-        height: 12,
-    },
-    ornamentTL: { top: 6, left: 6, borderTopWidth: 2, borderLeftWidth: 2 },
-    ornamentTR: { top: 6, right: 6, borderTopWidth: 2, borderRightWidth: 2 },
-    ornamentBL: { bottom: 6, left: 6, borderBottomWidth: 2, borderLeftWidth: 2 },
-    ornamentBR: { bottom: 6, right: 6, borderBottomWidth: 2, borderRightWidth: 2 },
 
     /* Styles pour la boîte d'alerte personnalisée */
     modalOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: withAlpha(p.bg, 0.85),
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
@@ -644,7 +615,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         width: '100%',
         maxWidth: 350,
-        backgroundColor: '#1a1a1a',
+        backgroundColor: p.bg,
         padding: 25,
         borderRadius: 12,
         borderWidth: 1.5,

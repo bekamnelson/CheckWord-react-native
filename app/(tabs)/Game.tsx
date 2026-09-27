@@ -3,8 +3,8 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     Alert,
-    ImageBackground,
     SafeAreaView,
+    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -18,14 +18,39 @@ import {
     TestIds,
 } from 'react-native-google-mobile-ads';
 
+import { useTranslation } from 'react-i18next';
 import AdConfirmModal from './../../components/AdConfirmModal';
 import Boite from './../../components/Boite';
+import Icon, { IconText } from './../../components/Icon';
+import DifficultyBadge, { DIFFICULTY_BADGE_SPACE, borderTopOf } from './../../components/DifficultyBadge';
 import Keyboard from './../../components/Keyboard';
 import Letter from './../../components/Letter';
-import Life from './../../components/Life';
-import { THEMES } from './../../components/themeRegistry';
+import LifeBar from './../../components/LifeBar';
+import Ornaments from './../../components/Ornaments';
+import ThemeBackdrop from './../../components/ThemeBackdrop';
+import { themeUnlockedAt } from './../../components/themeRegistry';
+import { useGameTheme } from './../../contexts/GameThemeContext';
+import { ThemePalette, withAlpha } from './../../themes/decor';
 
-import listWord from './../../JSON/liste_mot.json';
+import listWordDe from './../../JSON/liste_mot_de.json';
+import listWordEn from './../../JSON/liste_mot_en.json';
+import listWordEs from './../../JSON/liste_mot_es.json';
+import listWordFr from './../../JSON/liste_mot_fr.json';
+
+interface WordEntry {
+    word: string;
+    indice: string;
+    difficulte: string;
+}
+
+// Une liste de mots par langue, chacune avec sa propre sauvegarde des mots déjà trouvés.
+// La clé FR reste 'niveauxJoues' pour conserver la progression des joueurs existants.
+const WORD_LISTS: Record<string, { words: WordEntry[]; playedKey: string }> = {
+    fr: { words: listWordFr, playedKey: 'niveauxJoues' },
+    en: { words: listWordEn, playedKey: 'niveauxJoues_en' },
+    es: { words: listWordEs, playedKey: 'niveauxJoues_es' },
+    de: { words: listWordDe, playedKey: 'niveauxJoues_de' },
+};
 
 const IS_CLOSED_TESTING = true;
 
@@ -65,10 +90,11 @@ interface AdPromptState {
     required: number;
 }
 
+// Noms d'icônes Font Awesome
 const BOOSTER_ICONS: Record<BoosterType, string> = {
-    revealLetter: '💡',
-    extraLife: '🔴',
-    revealWord: '👁️',
+    revealLetter: 'lightbulb',
+    extraLife: 'heart',
+    revealWord: 'eye',
 };
 
 const ADS_REQUIRED: Record<BoosterType, number> = {
@@ -87,8 +113,14 @@ const EMPTY_AD_PROMPT: AdPromptState = {
 
 export default function GameScreen() {
     const router = useRouter();
+    const { t, i18n } = useTranslation();
+    const { theme: activeTheme, decor, setThemeId, themeIdRef } = useGameTheme();
+    const localStyles = React.useMemo(() => makeLocalStyles(decor.palette), [decor]);
+    const lang = WORD_LISTS[i18n.language?.slice(0, 2)] ? i18n.language.slice(0, 2) : 'fr';
+    const { words: listWord, playedKey } = WORD_LISTS[lang];
 
     const [indice, setIndice] = useState<number>(0);
+    const [wordLang, setWordLang] = useState<string>(lang);
     const [checkWord, setCheckWord] = useState<string[]>([]);
     const [trouve, setTrouve] = useState<string[]>([]);
     const [life, setLife] = useState<number[]>([1, 1, 1, 1, 1]);
@@ -102,6 +134,7 @@ export default function GameScreen() {
         gamesPlayedCount: 0,
     });
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [unlockedTheme, setUnlockedTheme] = useState<string | null>(null);
 
     const [adPrompt, setAdPrompt] = useState<AdPromptState>(EMPTY_AD_PROMPT);
     const [isInterstitialLoaded, setIsInterstitialLoaded] = useState(false);
@@ -113,7 +146,9 @@ export default function GameScreen() {
         setPlayer((prevPlayer) => {
             const newPlayerState = modifier(prevPlayer);
             // Sauvegarde immédiate du NOUVEL état
-            AsyncStorage.setItem('player', JSON.stringify(newPlayerState)).catch(console.error);
+            // Le thème est géré par le contexte : on sauvegarde toujours sa valeur à jour
+            const toSave = { ...newPlayerState, selectedTheme: themeIdRef.current };
+            AsyncStorage.setItem('player', JSON.stringify(toSave)).catch(console.error);
             return newPlayerState;
         });
     };
@@ -160,15 +195,20 @@ export default function GameScreen() {
         };
     }, []);
 
-    const checkLevel = useCallback(async (level: number, playedLevels: number[]): Promise<number> => {
-        if (level >= listWord.length) {
-            return checkLevel(0, playedLevels);
+    // Premier mot non encore trouvé à partir de `start` (en bouclant) ; si tout a été trouvé, on rejoue `start`.
+    const pickLevel = useCallback((start: number, playedLevels: number[]): number => {
+        const played = new Set(playedLevels);
+        for (let k = 0; k < listWord.length; k++) {
+            const i = (start + k) % listWord.length;
+            if (!played.has(i)) return i;
         }
-        if (playedLevels.includes(level)) {
-            return checkLevel(level + 1, playedLevels);
-        }
-        return level;
-    }, []);
+        return start;
+    }, [listWord]);
+
+    const loadPlayedLevels = useCallback(async (): Promise<number[]> => {
+        const savedPlayed = await AsyncStorage.getItem(playedKey);
+        return savedPlayed ? JSON.parse(savedPlayed) : [];
+    }, [playedKey]);
 
     useFocusEffect(
         useCallback(() => {
@@ -176,19 +216,22 @@ export default function GameScreen() {
                 // ==============================================================
                 // CORRECTION : ÉVITE LE REDÉMARRAGE APRÈS AVOIR VU UNE VIDÉO
                 // ==============================================================
-                if (isLoaded) return;
+                // Un changement de langue dans les réglages impose en revanche un nouveau mot.
+                if (isLoaded && wordLang === lang) return;
 
                 try {
-                    const savedPlayed = await AsyncStorage.getItem('niveauxJoues');
-                    const playedLevels: number[] = savedPlayed ? JSON.parse(savedPlayed) : [];
+                    const playedLevels = await loadPlayedLevels();
 
                     const randomIndex = Math.floor(Math.random() * listWord.length);
-                    const nextIndice = await checkLevel(randomIndex, playedLevels);
+                    const nextIndice = pickLevel(randomIndex, playedLevels);
 
                     const currentWord = listWord[nextIndice].word.split('');
                     setIndice(nextIndice);
+                    setWordLang(lang);
                     setCheckWord(currentWord);
                     setTrouve(Array(currentWord.length).fill(''));
+                    setLife([1, 1, 1, 1, 1]);
+                    setCountLife(4);
 
                     const savedPlayer = await AsyncStorage.getItem('player');
                     if (savedPlayer) {
@@ -223,22 +266,21 @@ export default function GameScreen() {
 
                 } catch (err) {
                     console.error("Erreur lors de l'initialisation du jeu :", err);
-                    Alert.alert("Erreur", "Impossible de charger votre partie. Veuillez relancer l'application.");
+                    Alert.alert(t('game_erreur_titre'), t('game_erreur_msg'));
                 }
             }
 
             initGame();
-        }, [checkLevel, isLoaded])
+        }, [pickLevel, loadPlayedLevels, isLoaded, wordLang, lang, listWord])
     );
 
     const saveLevel = async (indiceMot: number) => {
         try {
-            const sauvegarde = await AsyncStorage.getItem('niveauxJoues');
-            let motsJoues: number[] = sauvegarde ? JSON.parse(sauvegarde) : [];
+            const motsJoues = await loadPlayedLevels();
 
             if (!motsJoues.includes(indiceMot)) {
                 motsJoues.push(indiceMot);
-                await AsyncStorage.setItem('niveauxJoues', JSON.stringify(motsJoues));
+                await AsyncStorage.setItem(playedKey, JSON.stringify(motsJoues));
             }
         } catch (err) {
             console.error('Erreur de sauvegarde :', err);
@@ -263,12 +305,18 @@ export default function GameScreen() {
         // ==============================================================
         // CORRECTION : SAUVEGARDE SÉCURISÉE DES PIÈCES ET DU NIVEAU
         // ==============================================================
+        // Un nouveau thème se débloque tous les 50 niveaux : on l'applique automatiquement
+        // (le joueur peut toujours en choisir un autre depuis la page Thèmes).
+        const unlocked = isWin ? themeUnlockedAt(player.level + 1) : undefined;
+        setUnlockedTheme(unlocked?.name ?? null);
+
         updatePlayerSafe((prev) => ({
             ...prev,
             level: isWin ? prev.level + 1 : prev.level,
             coins: isWin ? prev.coins + 15 : prev.coins,
             gamesPlayedCount: finalCount,
         }));
+        if (unlocked) setThemeId(unlocked.id);
 
         if (isWin) {
             saveLevel(indice);
@@ -318,7 +366,7 @@ export default function GameScreen() {
             );
             rewarded.show();
         } else {
-            Alert.alert("Indisponible", "La vidéo n'est pas encore prête, réessayez dans un instant.");
+            Alert.alert(t('game_video_indispo_titre'), t('game_video_indispo_msg'));
             rewarded.load();
         }
     };
@@ -431,11 +479,14 @@ export default function GameScreen() {
         }
     };
 
-    const handleReset = () => {
-        const indexIndice = Math.floor(Math.random() * listWord.length);
+    const handleReset = async () => {
+        const playedLevels = await loadPlayedLevels().catch(() => []);
+        const indexIndice = pickLevel(Math.floor(Math.random() * listWord.length), playedLevels);
         const newWord = listWord[indexIndice].word.split('');
 
         setIndice(indexIndice);
+        setWordLang(lang);
+        setUnlockedTheme(null);
         setCheckWord(newWord);
         setTrouve(Array(newWord.length).fill(''));
         setLife([1, 1, 1, 1, 1]);
@@ -450,110 +501,100 @@ export default function GameScreen() {
 
     if (!isLoaded || checkWord.length === 0) return null;
 
-    const activeTheme = THEMES[player.selectedTheme] || THEMES[1];
     const styles = activeTheme.gameStyles;
 
     return (
         <SafeAreaView style={styles.gameWrap}>
-            <ImageBackground
-                source={activeTheme.backgroundImage}
-                style={styles.heroBg}
-                resizeMode="cover"
-            >
-                <View style={styles.heroOverlay} />
-            </ImageBackground>
+            <ThemeBackdrop />
 
             <View style={styles.gameHeader}>
                 <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-                    <Text style={styles.backBtnText}>← Retour</Text>
+                    <IconText icon="arrow-left" textStyle={styles.backBtnText}>{t('retour')}</IconText>
                 </TouchableOpacity>
 
                 <View style={styles.levelIndicator}>
-                    <Text style={styles.levelIndicatorText}>Niveau {player.level}</Text>
+                    <Text style={styles.levelIndicatorText}>{t('game_niveau', { level: player.level })}</Text>
                 </View>
 
                 <View style={localStyles.coinBadge}>
-                    <Text style={localStyles.coinBadgeText}>🪙 {player.coins}</Text>
+                    <IconText icon="coins" textStyle={localStyles.coinBadgeText} gap={6}>{player.coins}</IconText>
                 </View>
             </View>
 
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <ScrollView
+                contentContainerStyle={localStyles.scroll}
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+            >
                 <View style={styles.bigcontainer}>
-                    <View style={[styles.ornament, styles.ornamentTL]} />
-                    <View style={[styles.ornament, styles.ornamentTR]} />
-                    <View style={[styles.ornament, styles.ornamentBL]} />
-                    <View style={[styles.ornament, styles.ornamentBR]} />
+                    <Ornaments />
 
                     <View style={styles.container}>
-                        <View style={styles.description}>
+                        <View style={[styles.description, localStyles.tight, localStyles.hintWithBadge]}>
+                            <DifficultyBadge
+                                level={WORD_LISTS[wordLang].words[indice]?.difficulte}
+                                borderTopWidth={borderTopOf(styles.description)}
+                            />
                             <Text style={styles.contenuedescription}>
-                                {listWord[indice]?.indice}
+                                {WORD_LISTS[wordLang].words[indice]?.indice}
                             </Text>
                         </View>
 
-                        <View style={styles.game}>
+                        <View style={[styles.game, localStyles.tight]}>
                             {trouve.map((item, i) => (
                                 <Letter key={i} letter={item} styles={styles} />
                             ))}
                         </View>
 
+                        <LifeBar remaining={countLife + 1} total={life.length} />
+
                         <View style={localStyles.boostersBar}>
-                            <TouchableOpacity
-                                style={localStyles.boosterBtn}
-                                onPress={() => handleUseBooster('revealLetter', 30, '1 Lettre')}
-                            >
-                                <Text style={localStyles.boosterIcon}>💡</Text>
-                                <Text style={localStyles.boosterLabel}>1 Lettre</Text>
-                                <Text style={localStyles.boosterPrice}>
-                                    {player.boosters.revealLetter > 0 ? `x${player.boosters.revealLetter}` : '🪙 30'}
-                                </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[
-                                    localStyles.boosterBtn,
-                                    countLife >= 4 && localStyles.boosterDisabled,
-                                ]}
-                                onPress={() => handleUseBooster('extraLife', 15, '+1 Vie')}
-                                disabled={countLife >= 4}
-                            >
-                                <Text style={localStyles.boosterIcon}>🔴</Text>
-                                <Text style={localStyles.boosterLabel}>+1 Vie</Text>
-                                <Text style={localStyles.boosterPrice}>
-                                    {player.boosters.extraLife > 0 ? `x${player.boosters.extraLife}` : '🪙 15'}
-                                </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={localStyles.boosterBtn}
-                                onPress={() => handleUseBooster('revealWord', 50, 'Tout le mot')}
-                            >
-                                <Text style={localStyles.boosterIcon}>👁️</Text>
-                                <Text style={localStyles.boosterLabel}>Tout le mot</Text>
-                                <Text style={localStyles.boosterPrice}>
-                                    {player.boosters.revealWord > 0 ? `x${player.boosters.revealWord}` : '🪙 50'}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.lifebar}>
-                            {life.map((item, i) => (
-                                <Life key={i} active={item === 1} styles={styles} />
-                            ))}
+                            {([
+                                { type: 'revealLetter', cost: 30, label: t('game_booster_lettre'), icon: BOOSTER_ICONS.revealLetter, iconColor: decor.palette.primary },
+                                { type: 'extraLife', cost: 15, label: t('game_booster_vie'), icon: decor.icons.life, iconColor: decor.icons.lifeColor },
+                                { type: 'revealWord', cost: 50, label: t('game_booster_mot'), icon: BOOSTER_ICONS.revealWord, iconColor: decor.palette.accent },
+                            ] as const).map(({ type, cost, label, icon, iconColor }) => {
+                                const disabled = type === 'extraLife' && countLife >= 4;
+                                const stock = player.boosters[type];
+                                return (
+                                    <TouchableOpacity
+                                        key={type}
+                                        style={[localStyles.boosterBtn, disabled && localStyles.boosterDisabled]}
+                                        onPress={() => handleUseBooster(type, cost, label)}
+                                        disabled={disabled}
+                                    >
+                                        <Icon name={icon} size={18} color={iconColor} />
+                                        <Text style={localStyles.boosterLabel}>{label}</Text>
+                                        {stock > 0 ? (
+                                            <Text style={localStyles.boosterPrice}>x{stock}</Text>
+                                        ) : (
+                                            <IconText icon="coins" textStyle={localStyles.boosterPrice} gap={4}>{cost}</IconText>
+                                        )}
+                                    </TouchableOpacity>
+                                );
+                            })}
                         </View>
 
                         <Keyboard onLetterClick={handleLetterClick} styles={styles} />
                     </View>
                 </View>
-            </View>
+            </ScrollView>
 
             {isGameOver && <Boite handlereset={handleReset} word={checkWord.join('')} styles={styles} />}
-            {isGameWon && <Boite haswon={true} handlereset={handleReset} word={checkWord.join('')} styles={styles} />}
+            {isGameWon && (
+                <Boite
+                    haswon={true}
+                    handlereset={handleReset}
+                    word={checkWord.join('')}
+                    styles={styles}
+                    unlockedTheme={unlockedTheme}
+                />
+            )}
 
             <AdConfirmModal
                 visible={adPrompt.visible}
                 boosterName={adPrompt.boosterName}
-                boosterIcon={adPrompt.boosterType ? BOOSTER_ICONS[adPrompt.boosterType] : '⭐'}
+                boosterIcon={adPrompt.boosterType === 'extraLife' ? decor.icons.life : adPrompt.boosterType ? BOOSTER_ICONS[adPrompt.boosterType] : 'star'}
                 watched={adPrompt.watched}
                 required={adPrompt.required}
                 onCancel={closeAdPrompt}
@@ -563,17 +604,31 @@ export default function GameScreen() {
     );
 }
 
-const localStyles = StyleSheet.create({
+// Styles propres à l'écran, calculés à partir de la palette du thème actif
+const makeLocalStyles = (p: ThemePalette) => StyleSheet.create({
+    scroll: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingBottom: 12,
+    },
+    // Marges réduites pour laisser de la place au grand clavier
+    tight: {
+        marginBottom: 14,
+    },
+    hintWithBadge: {
+        marginTop: DIFFICULTY_BADGE_SPACE,
+        paddingTop: DIFFICULTY_BADGE_SPACE + 6,
+    },
     coinBadge: {
-        backgroundColor: 'rgba(240, 192, 64, 0.25)',
+        backgroundColor: withAlpha(p.primary, 0.2),
         borderWidth: 1,
-        borderColor: '#f0c040',
+        borderColor: p.primary,
         paddingHorizontal: 12,
         paddingVertical: 5,
         borderRadius: 16,
     },
     coinBadgeText: {
-        color: '#f0c040',
+        color: p.primary,
         fontWeight: 'bold',
         fontSize: 14,
     },
@@ -586,8 +641,8 @@ const localStyles = StyleSheet.create({
     },
     boosterBtn: {
         flex: 1,
-        backgroundColor: 'rgba(240, 192, 64, 0.12)',
-        borderColor: '#f0c040',
+        backgroundColor: withAlpha(p.primary, 0.12),
+        borderColor: p.primary,
         borderWidth: 1,
         borderRadius: 10,
         paddingVertical: 8,
@@ -596,20 +651,17 @@ const localStyles = StyleSheet.create({
     },
     boosterDisabled: {
         opacity: 0.35,
-        borderColor: '#777',
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    },
-    boosterIcon: {
-        fontSize: 18,
+        borderColor: p.textMuted,
+        backgroundColor: 'transparent',
     },
     boosterLabel: {
-        color: '#fff',
+        color: p.text,
         fontSize: 11,
         fontWeight: '600',
         marginTop: 2,
     },
     boosterPrice: {
-        color: '#f0c040',
+        color: p.primary,
         fontSize: 11,
         fontWeight: 'bold',
         marginTop: 2,

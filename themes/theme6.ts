@@ -23,12 +23,12 @@ export const theme6Styles = StyleSheet.create({
 
     // .hero-bg & .hero-overlay
     heroBg: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         width: '100%',
         height: '100%',
     },
     heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         // Remplacement du dégradé par une couleur unie sombre et chaude
         backgroundColor: 'rgba(45, 36, 31, 0.75)',
     },

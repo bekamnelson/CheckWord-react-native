@@ -1,0 +1,304 @@
+{
+    "sous_titre": "Le Défi des Mots Cachés",
+    "niveau": "Niveau",
+    "bouton_solo": "Solo",
+    "bouton_multi": "Multijoueur",
+    "bouton_themes": "Thèmes",
+    "bouton_survie": "Mode Survie",
+    "bouton_classement": "Classement",
+    "citation": "« Chaque mot révélé, une victoire de plus »",
+    "retour": "Retour",
+    "settings_title": "Paramètres",
+    "settings_sound": "Musique de fond",
+    "settings_sound_on": "Activée",
+    "settings_sound_off": "Désactivée",
+    "settings_language": "Langue",
+    "settings_about": "À propos",
+    "settings_app_name": "CheckWord",
+    "settings_version": "Version",
+    "settings_description": "Un jeu de mots où chaque lettre compte. Testez votre vocabulaire, progressez niveau après niveau et débloquez de nouveaux thèmes.",
+    "settings_back": "Retour",
+    "theme_titre": "Boutique de Thèmes",
+    "theme_niveau": "Niveau : {{level}}",
+    "theme_choisir": "Choisissez votre Décor",
+    "theme_deblocage": "Un nouveau thème se débloque tous les 50 niveaux !",
+    "theme_verrouille_titre": "Thème Verrouillé",
+    "theme_verrouille_msg": "Il faut atteindre le niveau {{reqLevel}} pour débloquer ce thème !",
+    "vies": "Vies",
+    "game_niveau": "Niveau {{level}}",
+    "game_booster_lettre": "1 Lettre",
+    "game_booster_vie": "+1 Vie",
+    "game_booster_mot": "Tout le mot",
+    "game_erreur_titre": "Erreur",
+    "game_erreur_msg": "Impossible de charger votre partie. Veuillez relancer l'application.",
+    "game_video_indispo_titre": "Indisponible",
+    "game_video_indispo_msg": "La vidéo n'est pas encore prête, réessayez dans un instant.",
+    "aide_titre": "Comment jouer",
+    "aide_modes": [
+        {
+            "id": "solo",
+            "titre": "Solo",
+            "sections": [
+                {
+                    "titre": "Le but du jeu",
+                    "texte": "Tu dois deviner un mot mystère caché derrière des cases vides, en t'aidant d'un indice textuel."
+                },
+                {
+                    "titre": "Comment jouer (étape par étape)",
+                    "etapes": [
+                        "Lis l'indice : en haut de l'écran, une phrase ou un mot t'est donné (par exemple : « Animal qui miaule »).",
+                        "Regarde les cases : juste en dessous, tu vois des cases vides. Cela t'indique combien de lettres contient le mot mystère (ex. : 5 cases pour C-H-A-T-S).",
+                        {
+                            "texte": "Propose des lettres : utilise le clavier en bas de l'écran pour taper une lettre.",
+                            "sous": [
+                                {
+                                    "icone": "circle-check",
+                                    "texte": "Si tu as juste : la lettre s'affiche dans la ou les bonnes cases."
+                                },
+                                {
+                                    "icone": "circle-xmark",
+                                    "texte": "Si tu te trompes : tu perds une vie (un cœur)."
+                                }
+                            ]
+                        },
+                        "Attention à tes vies : tu commences avec 5 cœurs. Si tu perds tous tes cœurs avant d'avoir trouvé le mot, c'est le Game Over !"
+                    ]
+                },
+                {
+                    "titre": "Gagner et progresser",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "Victoire : si tu trouves toutes les lettres du mot, tu gagnes la partie ! Tu remportes 15 pièces d'or et tu passes au niveau suivant."
+                        },
+                        {
+                            "icone": "palette",
+                            "texte": "Thèmes : tous les 50 niveaux, un nouveau thème se débloque et s'applique automatiquement. Tu as la possibilité de modifier le thème à tout moment depuis la page Thèmes."
+                        },
+                        {
+                            "icone": "film",
+                            "texte": "Publicités : toutes les 5 parties jouées, une petite publicité s'affiche pour soutenir le jeu."
+                        }
+                    ]
+                },
+                {
+                    "titre": "Les coups de pouce (boosters)",
+                    "texte": "Si tu es bloqué sur un mot difficile, tu as 3 jokers à ta disposition. Tu peux les acheter avec tes pièces d'or, ou regarder une vidéo pour les utiliser gratuitement :",
+                    "points": [
+                        {
+                            "icone": "lightbulb",
+                            "texte": "L'Ampoule (révéler une lettre) : coûte 30 pièces (ou 1 pub). Place automatiquement une bonne lettre au hasard dans le mot."
+                        },
+                        {
+                            "icone": "heart",
+                            "texte": "Le Cœur (vie supplémentaire) : coûte 15 pièces (ou 1 pub). Te redonne une chance de te tromper si tu n'as presque plus de vies."
+                        },
+                        {
+                            "icone": "eye",
+                            "texte": "L'Œil (révéler le mot) : coûte 50 pièces (ou 2 pubs). Résout le mot entier instantanément et te fait gagner le niveau !"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "multi",
+            "titre": "Multijoueur",
+            "sections": [
+                {
+                    "titre": "Le but du jeu",
+                    "texte": "Le but est d'être le dernier survivant. Chaque joueur commence avec 5 vies (représentées par des cœurs). Si vous vous trompez trop souvent, vous perdez toutes vos vies et êtes éliminé. Le dernier joueur en vie gagne la partie."
+                },
+                {
+                    "titre": "Le principe et le déroulement",
+                    "texte": "Le jeu se joue de 2 à 6 joueurs et se divise en plusieurs « manches ». Dans chaque manche, il y a un Maître du jeu et des Devineurs."
+                },
+                {
+                    "titre": "1. Configuration (début de partie)",
+                    "points": [
+                        "Vous choisissez le nombre de joueurs (entre 2 et 6).",
+                        "Chaque joueur entre son pseudo.",
+                        "Tout le monde démarre avec 5 vies. Le Joueur 1 est désigné comme le premier « Maître »."
+                    ]
+                },
+                {
+                    "titre": "2. La phase du Maître",
+                    "points": [
+                        "Le joueur qui est le Maître prend l'appareil (à l'abri des regards).",
+                        "Il invente un mot secret (sans chiffres ni caractères spéciaux) et donne un indice (qui doit faire au moins 5 caractères) pour aider les autres.",
+                        "Une fois validé, il passe l'appareil aux autres joueurs."
+                    ]
+                },
+                {
+                    "titre": "3. La phase de recherche (le jeu principal)",
+                    "texte": "C'est le tour des autres joueurs (les « Devineurs »). Le nom du joueur dont c'est le tour s'affiche à l'écran. Le joueur actif voit l'indice et le mot caché (sous forme de cases vides), et doit proposer une lettre grâce au clavier :",
+                    "points": [
+                        {
+                            "icone": "circle-check",
+                            "texte": "Si la lettre EST dans le mot (bonne réponse) : la lettre s'affiche dans le mot. Le joueur qui a trouvé la lettre ne perd pas de vie et peut continuer à jouer (la main ne passe pas)."
+                        },
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "Si la lettre N'EST PAS dans le mot (mauvaise réponse) : le joueur perd 1 vie. Ensuite, c'est au tour du joueur suivant de tenter sa chance."
+                        },
+                        {
+                            "icone": "skull",
+                            "texte": "S'il perd ses 5 vies, il est éliminé et transformé en crâne."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Fin d'une manche (changement de Maître)",
+                    "points": [
+                        "Le joueur qui parvient à découvrir la toute dernière lettre du mot secret gagne la manche !",
+                        {
+                            "icone": "crown",
+                            "texte": "En récompense, ce joueur devient le nouveau Maître (il obtient la couronne) pour la manche suivante."
+                        },
+                        "Une nouvelle manche commence : le nouveau Maître tape un nouveau mot et un nouvel indice."
+                    ]
+                },
+                {
+                    "titre": "5. Fin de la partie",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "La partie s'arrête lorsqu'il ne reste plus qu'un seul joueur en vie (les autres ont perdu leurs 5 vies). Une boîte de dialogue s'affiche pour célébrer la victoire du survivant !"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "survie",
+            "titre": "Survie",
+            "sections": [
+                {
+                    "titre": "Le but du jeu",
+                    "texte": "Le but est de survivre le plus longtemps possible et de trouver le maximum de mots avant que le chronomètre ne tombe à zéro."
+                },
+                {
+                    "titre": "Le principe et le déroulement",
+                    "texte": "Dans ce mode, la gestion du temps est au cœur du jeu. Chaque action a une conséquence directe sur votre chronomètre."
+                },
+                {
+                    "titre": "1. Le point de départ",
+                    "points": [
+                        {
+                            "icone": "clock",
+                            "texte": "Vous débutez la partie avec un chronomètre initial de 2 minutes (120 secondes)."
+                        }
+                    ]
+                },
+                {
+                    "titre": "2. Le jeu principal",
+                    "points": [
+                        "À chaque tour, le jeu choisit un mot aléatoire dans une liste (en français, en anglais, en espagnol ou en allemand, selon la langue du jeu) et vous donne un indice.",
+                        "Le mot est caché sous forme de cases vides. Vous devez utiliser le clavier pour deviner les lettres."
+                    ]
+                },
+                {
+                    "titre": "3. Les bonus et malus (gestion du temps)",
+                    "texte": "Chaque clic sur une lettre impacte votre survie :",
+                    "points": [
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "Si vous vous trompez (mauvaise lettre) : c'est un malus ! Le chronomètre est amputé de 5 secondes de pénalité de façon immédiate. Il faut donc éviter de cliquer au hasard."
+                        },
+                        {
+                            "icone": "circle-check",
+                            "texte": "Si vous trouvez un mot complet : c'est un bonus ! Une fois la dernière lettre du mot découverte, vous gagnez 30 secondes supplémentaires sur votre chronomètre. Le jeu affiche alors un petit flash vert (+30s) et passe automatiquement au mot suivant après une toute petite pause."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Une difficulté croissante (escalade)",
+                    "texte": "Le jeu devient de plus en plus corsé au fur et à mesure que vous survivez :",
+                    "points": [
+                        "Mots 1 à 2 : difficulté Facile",
+                        "Mots 3 à 5 : difficulté Moyenne",
+                        "Mots 6 à 9 : Difficile",
+                        "À partir du 10e mot : Très Difficile"
+                    ],
+                    "note": "Quand le temps restant passe sous la barre des 20 secondes, le chronomètre devient rouge pour vous alerter du danger imminent !"
+                },
+                {
+                    "titre": "5. Fin de la partie et classement",
+                    "texte": "La partie s'arrête instantanément dès que le chronomètre atteint 0.",
+                    "points": [
+                        "Un écran de fin apparaît affichant vos statistiques : le nombre de mots trouvés et votre temps de survie total.",
+                        {
+                            "icone": "ranking-star",
+                            "texte": "Le jeu enregistre votre score et vous indique si vous avez battu un record ou quelle est votre position dans le classement général. Vous avez ensuite la possibilité de rejouer ou d'aller voir les classements."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "survie_titre": "Mode Survie",
+    "survie_regle_depart": "Vous commencez avec {{time}} au chrono",
+    "survie_regle_bonus": "Mot trouvé : +{{s}} secondes",
+    "survie_regle_malus": "Mauvaise lettre : -{{s}} secondes",
+    "survie_regle_difficulte": "Les mots deviennent de plus en plus difficiles",
+    "survie_commencer": "Commencer",
+    "survie_fin": "Temps écoulé !",
+    "survie_mots": "Mots trouvés",
+    "survie_duree": "Temps survécu",
+    "survie_record": "Nouveau record !",
+    "survie_rang": "{{rank}}ᵉ place au classement",
+    "survie_hors_classement": "Pas assez pour entrer dans le top 10… Réessayez !",
+    "survie_rejouer": "Rejouer",
+    "survie_jouer": "Jouer en mode survie",
+    "survie_classement": "Classement",
+    "survie_classement_sous_titre": "Vos {{count}} meilleures tentatives en mode survie",
+    "survie_classement_vide": "Aucune partie pour l'instant.\nLancez le mode survie pour inscrire votre premier score !",
+    "survie_mots_count_one": "{{count}} mot trouvé",
+    "survie_mots_count_other": "{{count}} mots trouvés",
+    "survie_nouveau": "NOUVEAU",
+    "challenge_mode": "Défi Multijoueur",
+    "challenge_config": "Configuration",
+    "challenge_nb_joueurs": "Combien de joueurs participent ? (2 - 6)",
+    "challenge_suivant": "Suivant",
+    "challenge_valider": "Valider les joueurs",
+    "challenge_phase_maitre": "Phase du Maître",
+    "challenge_tour_maitre": "C'est au tour de {{nom}} de choisir un mot !",
+    "challenge_mot_secret": "Mot secret",
+    "challenge_indice_placeholder": "Indice du mot",
+    "challenge_lancer": "Lancer la partie",
+    "challenge_tour": "Tour de : {{nom}}",
+    "challenge_attention": "Attention",
+    "challenge_compris": "Compris",
+    "challenge_erreur_mot": "Le mot ne doit contenir que des lettres et ne pas être vide.",
+    "challenge_erreur_indice": "L'indice doit comporter au moins 5 caractères.",
+    "boite_victoire": "Victoire !",
+    "boite_victoire_msg": "Félicitations, vous avez trouvé le mot caché !",
+    "boite_victoire_btn": "Niveau suivant",
+    "boite_defaite": "Défaite !",
+    "boite_defaite_msg": "Désolé, vous avez atteint le nombre d'essais maximal.",
+    "boite_defaite_btn": "Réessayer",
+    "boite_mot_cache": "Le mot caché était :",
+    "boite_fin": "Fin de la Partie !",
+    "boite_fin_msg": "Le survivant ultime est {{nom}} !",
+    "boite_fin_btn": "Rejouer",
+    "boite_mot_trouve": "Mot Trouvé !",
+    "boite_mot_trouve_msg": "{{nom}} a trouvé la dernière lettre et devient le nouveau Maître du Jeu !",
+    "boite_mot_trouve_btn": "Manche Suivante",
+    "boite_retour": "Retour",
+    "boite_theme_debloque": "Nouveau thème débloqué : {{name}} !",
+    "boite_theme_applique": "Il a été appliqué automatiquement. Vous pouvez en changer à tout moment depuis la page Thèmes.",
+    "ad_encore": "Encore une vidéo !",
+    "ad_indisponible": "Booster indisponible",
+    "ad_plus_une": "Plus qu'une vidéo pour débloquer « {{name}} » !",
+    "ad_pas_pieces": "Vous n'avez pas assez de pièces pour utiliser « {{name}} ».\n{{info}}",
+    "ad_multi_videos": "Regardez {{count}} courtes vidéos pour l'obtenir gratuitement !",
+    "ad_une_video": "Regardez une courte vidéo pour l'obtenir gratuitement !",
+    "ad_progression": "Vidéo {{current}}/{{total}}",
+    "ad_regarder_multi": "Regarder la vidéo {{current}}/{{total}}",
+    "ad_regarder": "Regarder la pub",
+    "ad_annuler": "Annuler",
+    "difficulte_facile": "Facile",
+    "difficulte_moyen": "Moyen",
+    "difficulte_difficile": "Difficile",
+    "difficulte_tres_difficile": "Très difficile"
+}

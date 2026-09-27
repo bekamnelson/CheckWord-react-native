@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Life from './Life';
+import { useGameTheme } from '../contexts/GameThemeContext';
+import Icon from './Icon';
+import LifeBar from './LifeBar';
 
 interface PlayerProps {
     name: string;
     life: number; // Nombre de vies restantes (ex: 5)
-    icone: string; // Icône ou Emoji (ex: "🤖", "👤")
+    icone: string; // Nom d'icône Font Awesome (ex: "user", "crown")
     styles?: any; // Styles dynamiques du thème
     isCurrentTurn?: boolean; // Optionnel : indique si c'est au tour de ce joueur
 }
@@ -19,21 +21,21 @@ export default function Player({
 }: PlayerProps) {
     const table = [1, 2, 3, 4, 5];
 
-    // Récupération des couleurs dynamiques du thème si disponibles
-    const primaryTextColor = themeStyles?.headerTitle?.color || '#f0c040';
-    const secondaryTextColor = themeStyles?.contenuedescription?.color || '#ffffff';
-    const borderColor = themeStyles?.ornament?.borderColor || primaryTextColor;
+    // Couleurs du thème actif
+    const { decor } = useGameTheme();
+    const primaryTextColor = decor.palette.primary;
+    const borderColor = isCurrentTurn ? decor.palette.success : decor.palette.panelBorder;
 
     return (
         <View
             style={[
                 styles.playerBox,
-                { borderColor },
-                isCurrentTurn && styles.activeTurnBorder,
+                { borderColor, backgroundColor: decor.palette.panel },
+                isCurrentTurn && [styles.activeTurnBorder, { shadowColor: decor.palette.success }],
             ]}
         >
             {/* Icône du joueur */}
-            <Text style={styles.icon}>{icone}</Text>
+            <Icon name={icone} size={26} color={primaryTextColor} style={styles.icon} />
 
             {/* Nom du joueur */}
             <Text style={[styles.name, { color: primaryTextColor }]} numberOfLines={1}>
@@ -41,11 +43,7 @@ export default function Player({
             </Text>
 
             {/* Barre de vies */}
-            <View style={styles.lifebar}>
-                {table.map((item, i) => (
-                    <Life key={i} active={item <= life} />
-                ))}
-            </View>
+            <LifeBar remaining={life} total={table.length} compact />
         </View>
     );
 }
@@ -69,7 +67,6 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     icon: {
-        fontSize: 28,
         marginBottom: 4,
     },
     name: {

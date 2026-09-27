@@ -21,7 +21,7 @@ export const themeCardStyles = StyleSheet.create({
         paddingBottom: 10,
     },
     bgImage: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         justifyContent: 'flex-end',
         alignItems: 'center',
         paddingBottom: 10,

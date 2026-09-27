@@ -23,12 +23,12 @@ export const theme3Styles = StyleSheet.create({
 
     // .hero-bg & .hero-overlay
     heroBg: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         width: '100%',
         height: '100%',
     },
     heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         // Remplacement du radial-gradient par une couleur sombre unie
         backgroundColor: 'rgba(5, 2, 15, 0.75)',
     },
@@ -162,7 +162,7 @@ export const theme3Styles = StyleSheet.create({
     },
     // Overlay pour simuler le filtre CSS (sepia/hue-rotate)
     sceneOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(0, 243, 255, 0.15)', // Teinte bleutée cyber
     },
 

@@ -1,0 +1,304 @@
+{
+    "sous_titre": "Die Herausforderung der versteckten Wörter",
+    "niveau": "Level",
+    "bouton_solo": "Solo",
+    "bouton_multi": "Mehrspieler",
+    "bouton_themes": "Themen",
+    "bouton_survie": "Überlebensmodus",
+    "bouton_classement": "Rangliste",
+    "citation": "„Jedes enthüllte Wort ist ein weiterer Sieg“",
+    "retour": "Zurück",
+    "settings_title": "Einstellungen",
+    "settings_sound": "Hintergrundmusik",
+    "settings_sound_on": "An",
+    "settings_sound_off": "Aus",
+    "settings_language": "Sprache",
+    "settings_about": "Über",
+    "settings_app_name": "CheckWord",
+    "settings_version": "Version",
+    "settings_description": "Ein Wortspiel, bei dem jeder Buchstabe zählt. Teste deinen Wortschatz, steige Level für Level auf und schalte neue Themen frei.",
+    "settings_back": "Zurück",
+    "theme_titre": "Themen-Shop",
+    "theme_niveau": "Level: {{level}}",
+    "theme_choisir": "Wähle deine Kulisse",
+    "theme_deblocage": "Alle 50 Level wird ein neues Thema freigeschaltet!",
+    "theme_verrouille_titre": "Thema gesperrt",
+    "theme_verrouille_msg": "Erreiche Level {{reqLevel}}, um dieses Thema freizuschalten!",
+    "vies": "Leben",
+    "game_niveau": "Level {{level}}",
+    "game_booster_lettre": "1 Buchstabe",
+    "game_booster_vie": "+1 Leben",
+    "game_booster_mot": "Ganzes Wort",
+    "game_erreur_titre": "Fehler",
+    "game_erreur_msg": "Dein Spiel konnte nicht geladen werden. Bitte starte die App neu.",
+    "game_video_indispo_titre": "Nicht verfügbar",
+    "game_video_indispo_msg": "Das Video ist noch nicht bereit, versuche es gleich noch einmal.",
+    "aide_titre": "So wird gespielt",
+    "aide_modes": [
+        {
+            "id": "solo",
+            "titre": "Solo",
+            "sections": [
+                {
+                    "titre": "Das Ziel des Spiels",
+                    "texte": "Du musst ein geheimnisvolles Wort erraten, das sich hinter leeren Feldern versteckt – mit Hilfe eines Hinweises."
+                },
+                {
+                    "titre": "So wird gespielt (Schritt für Schritt)",
+                    "etapes": [
+                        "Lies den Hinweis: Oben auf dem Bildschirm steht ein Satz oder ein Wort (zum Beispiel: „Tier, das miaut“).",
+                        "Sieh dir die Felder an: Darunter siehst du leere Felder. Sie zeigen dir, wie viele Buchstaben das Wort hat (z. B. 5 Felder für K-A-T-Z-E).",
+                        {
+                            "texte": "Schlage Buchstaben vor: Benutze die Tastatur unten auf dem Bildschirm, um einen Buchstaben zu tippen.",
+                            "sous": [
+                                {
+                                    "icone": "circle-check",
+                                    "texte": "Wenn du richtig liegst: Der Buchstabe erscheint im richtigen Feld (oder in den richtigen Feldern)."
+                                },
+                                {
+                                    "icone": "circle-xmark",
+                                    "texte": "Wenn du dich irrst: Du verlierst ein Leben (ein Herz)."
+                                }
+                            ]
+                        },
+                        "Achte auf deine Leben: Du startest mit 5 Herzen. Verlierst du alle, bevor du das Wort gefunden hast, ist das Spiel vorbei!"
+                    ]
+                },
+                {
+                    "titre": "Gewinnen und aufsteigen",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "Sieg: Findest du alle Buchstaben des Wortes, gewinnst du die Runde! Du erhältst 15 Goldmünzen und steigst ein Level auf."
+                        },
+                        {
+                            "icone": "palette",
+                            "texte": "Themen: Alle 50 Level wird ein neues Thema freigeschaltet und automatisch angewendet. Du kannst das Thema jederzeit auf der Seite Themen ändern."
+                        },
+                        {
+                            "icone": "film",
+                            "texte": "Werbung: Alle 5 Spiele wird eine kurze Werbung gezeigt, um das Spiel zu unterstützen."
+                        }
+                    ]
+                },
+                {
+                    "titre": "Die Hilfen (Booster)",
+                    "texte": "Wenn du bei einem schweren Wort feststeckst, hast du 3 Joker zur Verfügung. Du kannst sie mit Goldmünzen kaufen oder ein Video ansehen, um sie kostenlos zu nutzen:",
+                    "points": [
+                        {
+                            "icone": "lightbulb",
+                            "texte": "Die Glühbirne (einen Buchstaben aufdecken): kostet 30 Münzen (oder 1 Werbung). Setzt automatisch einen richtigen Buchstaben zufällig ins Wort."
+                        },
+                        {
+                            "icone": "heart",
+                            "texte": "Das Herz (zusätzliches Leben): kostet 15 Münzen (oder 1 Werbung). Gibt dir eine weitere Chance, wenn du kaum noch Leben hast."
+                        },
+                        {
+                            "icone": "eye",
+                            "texte": "Das Auge (das Wort aufdecken): kostet 50 Münzen (oder 2 Werbungen). Löst das ganze Wort sofort und du gewinnst das Level!"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "multi",
+            "titre": "Mehrspieler",
+            "sections": [
+                {
+                    "titre": "Das Ziel des Spiels",
+                    "texte": "Ziel ist es, als Letzter übrig zu bleiben. Jeder Spieler startet mit 5 Leben (als Herzen dargestellt). Wer sich zu oft irrt, verliert alle Leben und scheidet aus. Der letzte Spieler mit Leben gewinnt."
+                },
+                {
+                    "titre": "Das Prinzip und der Ablauf",
+                    "texte": "Es wird mit 2 bis 6 Spielern gespielt, aufgeteilt in mehrere „Runden“. In jeder Runde gibt es einen Spielleiter und Rater."
+                },
+                {
+                    "titre": "1. Einstellungen (Spielbeginn)",
+                    "points": [
+                        "Ihr wählt die Anzahl der Spieler (zwischen 2 und 6).",
+                        "Jeder Spieler gibt seinen Namen ein.",
+                        "Alle starten mit 5 Leben. Spieler 1 ist der erste „Spielleiter“."
+                    ]
+                },
+                {
+                    "titre": "2. Die Phase des Spielleiters",
+                    "points": [
+                        "Der Spielleiter nimmt das Gerät (ohne dass die anderen zusehen).",
+                        "Er denkt sich ein geheimes Wort aus (ohne Zahlen oder Sonderzeichen) und gibt einen Hinweis (mindestens 5 Zeichen), um den anderen zu helfen.",
+                        "Nach der Bestätigung gibt er das Gerät an die anderen Spieler weiter."
+                    ]
+                },
+                {
+                    "titre": "3. Die Suchphase (das eigentliche Spiel)",
+                    "texte": "Jetzt sind die anderen Spieler dran (die „Rater“). Der Name des Spielers, der an der Reihe ist, wird angezeigt. Der aktive Spieler sieht den Hinweis und das versteckte Wort (als leere Felder) und schlägt über die Tastatur einen Buchstaben vor:",
+                    "points": [
+                        {
+                            "icone": "circle-check",
+                            "texte": "Ist der Buchstabe IM Wort (richtige Antwort): Der Buchstabe erscheint im Wort. Der Spieler verliert kein Leben und darf weiterspielen (der Zug geht nicht weiter)."
+                        },
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "Ist der Buchstabe NICHT im Wort (falsche Antwort): Der Spieler verliert 1 Leben. Danach ist der nächste Spieler dran."
+                        },
+                        {
+                            "icone": "skull",
+                            "texte": "Verliert er alle 5 Leben, scheidet er aus und wird zum Totenkopf."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Ende einer Runde (neuer Spielleiter)",
+                    "points": [
+                        "Wer den allerletzten Buchstaben des geheimen Wortes findet, gewinnt die Runde!",
+                        {
+                            "icone": "crown",
+                            "texte": "Als Belohnung wird dieser Spieler der neue Spielleiter (er bekommt die Krone) für die nächste Runde."
+                        },
+                        "Eine neue Runde beginnt: Der neue Spielleiter gibt ein neues Wort und einen neuen Hinweis ein."
+                    ]
+                },
+                {
+                    "titre": "5. Spielende",
+                    "points": [
+                        {
+                            "icone": "trophy",
+                            "texte": "Das Spiel endet, wenn nur noch ein Spieler Leben hat (die anderen haben ihre 5 Leben verloren). Ein Fenster feiert den Sieg des Überlebenden!"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "survie",
+            "titre": "Überleben",
+            "sections": [
+                {
+                    "titre": "Das Ziel des Spiels",
+                    "texte": "Ziel ist es, so lange wie möglich zu überleben und so viele Wörter wie möglich zu finden, bevor die Uhr auf null fällt."
+                },
+                {
+                    "titre": "Das Prinzip und der Ablauf",
+                    "texte": "In diesem Modus steht die Zeit im Mittelpunkt. Jede Aktion wirkt sich direkt auf deine Uhr aus."
+                },
+                {
+                    "titre": "1. Der Start",
+                    "points": [
+                        {
+                            "icone": "clock",
+                            "texte": "Du beginnst mit einer Uhr von 2 Minuten (120 Sekunden)."
+                        }
+                    ]
+                },
+                {
+                    "titre": "2. Das eigentliche Spiel",
+                    "points": [
+                        "In jeder Runde wählt das Spiel ein zufälliges Wort aus einer Liste (auf Französisch, Englisch, Spanisch oder Deutsch, je nach Spielsprache) und gibt dir einen Hinweis.",
+                        "Das Wort ist als leere Felder versteckt. Benutze die Tastatur, um die Buchstaben zu erraten."
+                    ]
+                },
+                {
+                    "titre": "3. Boni und Strafen (Zeitmanagement)",
+                    "texte": "Jeder Buchstabe, den du tippst, beeinflusst dein Überleben:",
+                    "points": [
+                        {
+                            "icone": "circle-xmark",
+                            "texte": "Wenn du dich irrst (falscher Buchstabe): Strafe! Sofort werden 5 Sekunden von der Uhr abgezogen. Tippe also nicht einfach drauflos."
+                        },
+                        {
+                            "icone": "circle-check",
+                            "texte": "Wenn du ein Wort vervollständigst: Bonus! Sobald der letzte Buchstabe gefunden ist, bekommst du 30 Sekunden extra. Ein kleiner grüner Blitz (+30s) erscheint und nach einer kurzen Pause geht es automatisch mit dem nächsten Wort weiter."
+                        }
+                    ]
+                },
+                {
+                    "titre": "4. Steigende Schwierigkeit",
+                    "texte": "Das Spiel wird immer schwieriger, je länger du überlebst:",
+                    "points": [
+                        "Wörter 1 bis 2: Leicht",
+                        "Wörter 3 bis 5: Mittel",
+                        "Wörter 6 bis 9: Schwer",
+                        "Ab dem 10. Wort: Sehr schwer"
+                    ],
+                    "note": "Wenn weniger als 20 Sekunden übrig sind, wird die Uhr rot, um dich vor der drohenden Gefahr zu warnen!"
+                },
+                {
+                    "titre": "5. Spielende und Rangliste",
+                    "texte": "Das Spiel endet sofort, wenn die Uhr 0 erreicht.",
+                    "points": [
+                        "Ein Endbildschirm zeigt deine Statistik: die Anzahl der gefundenen Wörter und deine gesamte Überlebenszeit.",
+                        {
+                            "icone": "ranking-star",
+                            "texte": "Das Spiel speichert deine Punktzahl und zeigt dir, ob du einen Rekord aufgestellt hast oder welchen Platz du in der Rangliste belegst. Danach kannst du erneut spielen oder die Rangliste ansehen."
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "survie_titre": "Überlebensmodus",
+    "survie_regle_depart": "Du startest mit {{time}} auf der Uhr",
+    "survie_regle_bonus": "Wort gefunden: +{{s}} Sekunden",
+    "survie_regle_malus": "Falscher Buchstabe: -{{s}} Sekunden",
+    "survie_regle_difficulte": "Die Wörter werden immer schwieriger",
+    "survie_commencer": "Starten",
+    "survie_fin": "Zeit abgelaufen!",
+    "survie_mots": "Gefundene Wörter",
+    "survie_duree": "Überlebte Zeit",
+    "survie_record": "Neuer Rekord!",
+    "survie_rang": "Platz {{rank}} in der Rangliste",
+    "survie_hors_classement": "Nicht genug für die Top 10… Versuch es noch einmal!",
+    "survie_rejouer": "Nochmal spielen",
+    "survie_jouer": "Überlebensmodus spielen",
+    "survie_classement": "Rangliste",
+    "survie_classement_sous_titre": "Deine {{count}} besten Versuche im Überlebensmodus",
+    "survie_classement_vide": "Noch keine Spiele.\nSpiele den Überlebensmodus, um deinen ersten Punktestand einzutragen!",
+    "survie_mots_count_one": "{{count}} Wort gefunden",
+    "survie_mots_count_other": "{{count}} Wörter gefunden",
+    "survie_nouveau": "NEU",
+    "challenge_mode": "Mehrspieler-Duell",
+    "challenge_config": "Einstellungen",
+    "challenge_nb_joueurs": "Wie viele Spieler machen mit? (2 - 6)",
+    "challenge_suivant": "Weiter",
+    "challenge_valider": "Spieler bestätigen",
+    "challenge_phase_maitre": "Phase des Spielleiters",
+    "challenge_tour_maitre": "{{nom}} ist dran und wählt ein Wort!",
+    "challenge_mot_secret": "Geheimes Wort",
+    "challenge_indice_placeholder": "Hinweis zum Wort",
+    "challenge_lancer": "Spiel starten",
+    "challenge_tour": "Am Zug: {{nom}}",
+    "challenge_attention": "Achtung",
+    "challenge_compris": "Verstanden",
+    "challenge_erreur_mot": "Das Wort darf nur Buchstaben enthalten und nicht leer sein.",
+    "challenge_erreur_indice": "Der Hinweis muss mindestens 5 Zeichen lang sein.",
+    "boite_victoire": "Sieg!",
+    "boite_victoire_msg": "Glückwunsch, du hast das versteckte Wort gefunden!",
+    "boite_victoire_btn": "Nächstes Level",
+    "boite_defaite": "Niederlage!",
+    "boite_defaite_msg": "Schade, du hast die maximale Anzahl an Versuchen erreicht.",
+    "boite_defaite_btn": "Nochmal versuchen",
+    "boite_mot_cache": "Das versteckte Wort war:",
+    "boite_fin": "Spielende!",
+    "boite_fin_msg": "Der ultimative Überlebende ist {{nom}}!",
+    "boite_fin_btn": "Nochmal spielen",
+    "boite_mot_trouve": "Wort gefunden!",
+    "boite_mot_trouve_msg": "{{nom}} hat den letzten Buchstaben gefunden und wird der neue Spielleiter!",
+    "boite_mot_trouve_btn": "Nächste Runde",
+    "boite_retour": "Zurück",
+    "boite_theme_debloque": "Neues Thema freigeschaltet: {{name}}!",
+    "boite_theme_applique": "Es wurde automatisch angewendet. Du kannst es jederzeit auf der Seite Themen ändern.",
+    "ad_encore": "Noch ein Video!",
+    "ad_indisponible": "Booster nicht verfügbar",
+    "ad_plus_une": "Nur noch ein Video, um „{{name}}“ freizuschalten!",
+    "ad_pas_pieces": "Du hast nicht genug Münzen für „{{name}}“.\n{{info}}",
+    "ad_multi_videos": "Sieh dir {{count}} kurze Videos an, um ihn kostenlos zu bekommen!",
+    "ad_une_video": "Sieh dir ein kurzes Video an, um ihn kostenlos zu bekommen!",
+    "ad_progression": "Video {{current}}/{{total}}",
+    "ad_regarder_multi": "Video {{current}}/{{total}} ansehen",
+    "ad_regarder": "Werbung ansehen",
+    "ad_annuler": "Abbrechen",
+    "difficulte_facile": "Leicht",
+    "difficulte_moyen": "Mittel",
+    "difficulte_difficile": "Schwer",
+    "difficulte_tres_difficile": "Sehr schwer"
+}

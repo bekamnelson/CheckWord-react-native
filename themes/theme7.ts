@@ -23,12 +23,12 @@ export const theme7Styles = StyleSheet.create({
 
     // .hero-bg & .hero-overlay
     heroBg: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         width: '100%',
         height: '100%',
     },
     heroOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         // Remplacement du radial-gradient par un voile bleu nuit profond
         backgroundColor: 'rgba(2, 8, 19, 0.85)',
     },
@@ -142,7 +142,7 @@ export const theme7Styles = StyleSheet.create({
     },
     // Overlay pour simuler le filtre CSS (sepia/hue-rotate) et donner l'effet Hologramme
     sceneOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(0, 229, 255, 0.25)',
     },
     // Ligne de scan radar (statique ici, à animer avec Animated API si besoin)
