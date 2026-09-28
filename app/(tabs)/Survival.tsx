@@ -44,7 +44,7 @@ const PENALTY_SECONDS = 5;
 const LOW_TIME_SECONDS = 20;
 const NEXT_WORD_DELAY_MS = 700;
 
-const IS_CLOSED_TESTING = true;
+const IS_CLOSED_TESTING = false;
 const interstitialAdUnitId = (__DEV__ || IS_CLOSED_TESTING)
     ? TestIds.INTERSTITIAL
     : 'ca-app-pub-5542646175321041/9569611051';

@@ -53,7 +53,7 @@ const WORD_LISTS: Record<string, { words: WordEntry[]; playedKey: string }> = {
     de: { words: listWordDe, playedKey: 'niveauxJoues_de' },
 };
 
-const IS_CLOSED_TESTING = true;
+const IS_CLOSED_TESTING = false;
 
 const interstitialAdUnitId = (__DEV__ || IS_CLOSED_TESTING)
     ? TestIds.INTERSTITIAL
