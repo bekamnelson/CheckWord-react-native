@@ -1,6 +1,7 @@
 import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 
 import {
     Modal,
@@ -31,6 +32,13 @@ interface PlayerData {
     life: number;
     active: boolean;
 }
+
+// Publicité affichée à la fin d'une partie (quand il ne reste qu'un joueur en vie)
+const IS_CLOSED_TESTING = false;
+const interstitialAdUnitId = (__DEV__ || IS_CLOSED_TESTING)
+    ? TestIds.INTERSTITIAL
+    : 'ca-app-pub-5542646175321041/9569611051';
+const interstitial = InterstitialAd.createForAdRequest(interstitialAdUnitId);
 
 export default function Challenge() {
     const router = useRouter();
@@ -77,10 +85,34 @@ export default function Challenge() {
         }, [])
     );
 
-    // Redirection automatique sur écran de fin de partie s'il ne reste qu'un survivant
+    // Préchargement de la publicité de fin de partie
+    const adLoadedRef = useRef(false);
+    useEffect(() => {
+        const unsubLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+            adLoadedRef.current = true;
+        });
+        const unsubClosed = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
+            adLoadedRef.current = false;
+            interstitial.load();
+        });
+        const unsubError = interstitial.addAdEventListener(AdEventType.ERROR, () => {
+            adLoadedRef.current = false;
+        });
+        interstitial.load();
+        return () => {
+            unsubLoaded();
+            unsubClosed();
+            unsubError();
+        };
+    }, []);
+
+    // Redirection automatique sur écran de fin de partie s'il ne reste qu'un survivant,
+    // précédée d'une publicité (l'écran du vainqueur s'affiche à sa fermeture)
     useEffect(() => {
         if (nbSurvivants === 1 && step === 3) {
             setStep(4);
+            if (adLoadedRef.current || interstitial.loaded) interstitial.show();
+            else interstitial.load();
         }
     }, [nbSurvivants, step]);
 
