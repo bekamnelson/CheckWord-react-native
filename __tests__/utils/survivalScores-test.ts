@@ -1,5 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { formatTime, loadScores, MAX_SCORES, saveScore, SurvivalAttempt } from '../../utils/survivalScores';
+import {
+    formatTime,
+    loadBestDuration,
+    loadScores,
+    MAX_SCORES,
+    saveBestDuration,
+    saveScore,
+    SurvivalAttempt,
+} from '../../utils/survivalScores';
 
 const attempt = (id: string, wordsFound: number, duration = 60, date = 1): SurvivalAttempt => ({
     id,
@@ -52,6 +60,25 @@ describe('classement du mode survie', () => {
         await AsyncStorage.setItem('survie_classement', '{pas du json');
         expect(await loadScores()).toEqual([]);
         spy.mockRestore();
+    });
+});
+
+describe('meilleur temps de survie (déblocage des thèmes)', () => {
+    it('vaut 0 au départ', async () => {
+        expect(await loadBestDuration()).toBe(0);
+    });
+
+    it('reprend la plus longue partie du classement pour les anciens joueurs', async () => {
+        await saveScore(attempt('a', 3, 180));
+        await saveScore(attempt('b', 1, 275));
+        expect(await loadBestDuration()).toBe(275);
+    });
+
+    it('ne garde que le record', async () => {
+        expect(await saveBestDuration(250)).toEqual({ before: 0, after: 250 });
+        expect(await saveBestDuration(120)).toEqual({ before: 250, after: 250 });
+        expect(await saveBestDuration(301.7)).toEqual({ before: 250, after: 301 });
+        expect(await loadBestDuration()).toBe(301);
     });
 });
 

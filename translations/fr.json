@@ -21,7 +21,7 @@
     "theme_titre": "Boutique de Thèmes",
     "theme_niveau": "Niveau : {{level}}",
     "theme_choisir": "Choisissez votre Décor",
-    "theme_deblocage": "Un nouveau thème se débloque tous les 50 niveaux !",
+    "theme_deblocage": "Joue en Solo et en mode Survie pour débloquer 16 thèmes !",
     "theme_verrouille_titre": "Thème Verrouillé",
     "theme_verrouille_msg": "Il faut atteindre le niveau {{reqLevel}} pour débloquer ce thème !",
     "vies": "Vies",
@@ -232,6 +232,15 @@
                             "texte": "Le jeu enregistre votre score et vous indique si vous avez battu un record ou quelle est votre position dans le classement général. Vous avez ensuite la possibilité de rejouer ou d'aller voir les classements."
                         }
                     ]
+                },
+                {
+                    "titre": "6. Des thèmes à débloquer",
+                    "texte": "Ton meilleur temps de survie débloque 8 thèmes exclusifs :",
+                    "points": [
+                        "4:00 de survie : Échecs",
+                        "Puis un nouveau thème à chaque minute supplémentaire : Hiver (5:00), Forêt (6:00), Étoiles (7:00), Noël (8:00), Foot (9:00), Savane (10:00) et Halloween (11:00)"
+                    ],
+                    "note": "Le thème débloqué est appliqué automatiquement à la fin de la partie. Tu peux en changer à tout moment depuis la page Thèmes."
                 }
             ]
         }
@@ -303,5 +312,12 @@
     "difficulte_tres_difficile": "Très difficile",
     "dialog_ok": "Compris",
     "theme_verrouille_progression": "Ton niveau : {{current}} / {{total}}",
-    "chargement": "Chargement"
+    "chargement": "Chargement",
+    "theme_section_niveaux": "Mode Solo : un thème tous les 50 niveaux",
+    "theme_section_survie": "Mode Survie : un thème par minute de survie",
+    "theme_survie_record": "Ton meilleur temps de survie : {{time}}",
+    "theme_survie_verrouille_msg": "Survis {{time}} en mode Survie pour débloquer ce thème !",
+    "theme_survie_progression": "Ton record : {{current}} / {{total}}",
+    "survie_prochain_theme": "Prochain thème : survis {{time}}",
+    "survie_regle_themes": "Survis 4:00 ou plus pour débloquer de nouveaux thèmes"
 }

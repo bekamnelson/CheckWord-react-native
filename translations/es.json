@@ -21,7 +21,7 @@
     "theme_titre": "Tienda de Temas",
     "theme_niveau": "Nivel: {{level}}",
     "theme_choisir": "Elige tu Decorado",
-    "theme_deblocage": "¡Se desbloquea un tema nuevo cada 50 niveles!",
+    "theme_deblocage": "¡Juega en Solo y en modo Supervivencia para desbloquear 16 temas!",
     "theme_verrouille_titre": "Tema Bloqueado",
     "theme_verrouille_msg": "¡Alcanza el nivel {{reqLevel}} para desbloquear este tema!",
     "vies": "Vidas",
@@ -232,6 +232,15 @@
                             "texte": "El juego guarda tu puntuación y te indica si has batido un récord o qué posición ocupas en la clasificación general. Después puedes volver a jugar o ver la clasificación."
                         }
                     ]
+                },
+                {
+                    "titre": "6. Temas por desbloquear",
+                    "texte": "Tu mejor tiempo de supervivencia desbloquea 8 temas exclusivos:",
+                    "points": [
+                        "4:00 de supervivencia: Ajedrez",
+                        "Luego un nuevo tema por cada minuto extra: Invierno (5:00), Bosque (6:00), Estrellas (7:00), Navidad (8:00), Fútbol (9:00), Sabana (10:00) y Halloween (11:00)"
+                    ],
+                    "note": "El tema desbloqueado se aplica automáticamente al final de la partida. Puedes cambiarlo en cualquier momento desde la página Temas."
                 }
             ]
         }
@@ -303,5 +312,12 @@
     "difficulte_tres_difficile": "Muy difícil",
     "dialog_ok": "Entendido",
     "theme_verrouille_progression": "Tu nivel: {{current}} / {{total}}",
-    "chargement": "Cargando"
+    "chargement": "Cargando",
+    "theme_section_niveaux": "Modo Solo: un tema cada 50 niveles",
+    "theme_section_survie": "Modo Supervivencia: un tema por cada minuto sobrevivido",
+    "theme_survie_record": "Tu mejor tiempo de supervivencia: {{time}}",
+    "theme_survie_verrouille_msg": "¡Sobrevive {{time}} en modo Supervivencia para desbloquear este tema!",
+    "theme_survie_progression": "Tu récord: {{current}} / {{total}}",
+    "survie_prochain_theme": "Próximo tema: sobrevive {{time}}",
+    "survie_regle_themes": "Sobrevive 4:00 o más para desbloquear nuevos temas"
 }

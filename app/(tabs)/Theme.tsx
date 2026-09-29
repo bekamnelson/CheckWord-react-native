@@ -15,10 +15,11 @@ import { IconText } from './../../components/Icon';
 import Ornaments from './../../components/Ornaments';
 import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
-import { THEME_UNLOCKS } from './../../components/themeRegistry';
+import { isThemeUnlocked, THEME_UNLOCKS, ThemeUnlock } from './../../components/themeRegistry';
 import { useDialog } from './../../contexts/DialogContext';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
+import { formatTime, loadBestDuration } from './../../utils/survivalScores';
 
 interface PlayerInfo {
     level: number;
@@ -26,7 +27,8 @@ interface PlayerInfo {
     game_version: string;
 }
 
-const themesList = THEME_UNLOCKS;
+const levelThemes = THEME_UNLOCKS.filter((th) => th.reqSurvival === undefined);
+const survivalThemes = THEME_UNLOCKS.filter((th) => th.reqSurvival !== undefined);
 
 export default function Theme() {
     const router = useRouter();
@@ -40,6 +42,7 @@ export default function Theme() {
         selectedTheme: 1,
         game_version: '2.1',
     });
+    const [bestSurvival, setBestSurvival] = useState(0);
 
     // Utilisation de useFocusEffect pour s'assurer que le niveau et le thème actif 
     // sont actualisés instantanément dès qu'on arrive sur cette page.
@@ -64,14 +67,30 @@ export default function Theme() {
                 }
             };
             loadPlayerData();
+            loadBestDuration().then(setBestSurvival);
         }, [])
     );
 
-    const handleClick = async (planId: number, reqLevel: number) => {
-        if (player.level >= reqLevel) {
+    const progress = { level: player.level, bestSurvival };
+
+    const handleClick = async (item: ThemeUnlock) => {
+        if (isThemeUnlocked(item, progress)) {
             // Appliqué instantanément à toute l'application (contexte partagé)
-            await setThemeId(planId);
+            await setThemeId(item.id);
+        } else if (item.reqSurvival !== undefined) {
+            const time = formatTime(item.reqSurvival);
+            showDialog({
+                title: t('theme_verrouille_titre'),
+                message: t('theme_survie_verrouille_msg', { time }),
+                icon: 'stopwatch',
+                progress: {
+                    current: bestSurvival,
+                    total: item.reqSurvival,
+                    label: t('theme_survie_progression', { current: formatTime(bestSurvival), total: time }),
+                },
+            });
         } else {
+            const reqLevel = item.reqLevel ?? 1;
             showDialog({
                 title: t('theme_verrouille_titre'),
                 message: t('theme_verrouille_msg', { reqLevel }),
@@ -84,6 +103,24 @@ export default function Theme() {
             });
         }
     };
+
+    const renderCards = (list: ThemeUnlock[]) => (
+        <View style={styles.themesGrid}>
+            {list.map((item) => (
+                <Card
+                    key={item.id}
+                    plan={item.id}
+                    lockLabel={item.reqSurvival !== undefined ? formatTime(item.reqSurvival) : `Niv. ${item.reqLevel}`}
+                    lockIcon={item.reqSurvival !== undefined ? 'stopwatch' : undefined}
+                    isUnlocked={isThemeUnlocked(item, progress)}
+                    isSelected={item.id === themeId}
+                    name={item.name}
+                    styles={styles}
+                    handleClick={() => handleClick(item)}
+                />
+            ))}
+        </View>
+    );
 
     return (
         <SafeAreaView style={styles.gameWrap}>
@@ -107,21 +144,18 @@ export default function Theme() {
                     <Text style={styles.title}>{t('theme_choisir')}</Text>
                     <Text style={styles.subtitle}>{t('theme_deblocage')}</Text>
 
-                    {/* Grille 2 cartes par ligne */}
-                    <View style={styles.themesGrid}>
-                        {themesList.map((item) => (
-                            <Card
-                                key={item.id}
-                                reqLevel={item.reqLevel}
-                                plan={item.id}
-                                isUnlocked={player.level >= item.reqLevel}
-                                isSelected={item.id === themeId}
-                                name={item.name}
-                                styles={styles}
-                                handleClick={() => handleClick(item.id, item.reqLevel)}
-                            />
-                        ))}
-                    </View>
+                    {/* Thèmes débloqués en Solo, par niveau */}
+                    <IconText icon="chess-knight" iconColor={pal.primary} textStyle={styles.sectionTitle} style={styles.sectionRow}>
+                        {t('theme_section_niveaux')}
+                    </IconText>
+                    {renderCards(levelThemes)}
+
+                    {/* Thèmes débloqués par le meilleur temps de survie */}
+                    <IconText icon="stopwatch" iconColor={pal.primary} textStyle={styles.sectionTitle} style={styles.sectionRow}>
+                        {t('theme_section_survie')}
+                    </IconText>
+                    <Text style={styles.sectionHint}>{t('theme_survie_record', { time: formatTime(bestSurvival) })}</Text>
+                    {renderCards(survivalThemes)}
                 </View>
             </ScrollView>
 
@@ -193,6 +227,26 @@ const makeStyles = (p: ThemePalette) => StyleSheet.create({
         textAlign: 'center',
         marginVertical: 10,
         fontSize: 13,
+    },
+    sectionRow: {
+        alignSelf: 'stretch',
+        justifyContent: 'flex-start',
+        marginTop: 18,
+        marginBottom: 4,
+        paddingBottom: 6,
+        borderBottomWidth: 1,
+        borderBottomColor: withAlpha(p.primary, 0.35),
+    },
+    sectionTitle: {
+        color: p.primary,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    sectionHint: {
+        alignSelf: 'flex-start',
+        color: p.textMuted,
+        fontSize: 12,
+        marginBottom: 4,
     },
 
     // --- Layout 2 cartes par ligne ---

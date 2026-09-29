@@ -21,7 +21,7 @@
     "theme_titre": "Themen-Shop",
     "theme_niveau": "Level: {{level}}",
     "theme_choisir": "Wähle deine Kulisse",
-    "theme_deblocage": "Alle 50 Level wird ein neues Thema freigeschaltet!",
+    "theme_deblocage": "Spiele Solo und im Überlebensmodus, um 16 Themen freizuschalten!",
     "theme_verrouille_titre": "Thema gesperrt",
     "theme_verrouille_msg": "Erreiche Level {{reqLevel}}, um dieses Thema freizuschalten!",
     "vies": "Leben",
@@ -232,6 +232,15 @@
                             "texte": "Das Spiel speichert deine Punktzahl und zeigt dir, ob du einen Rekord aufgestellt hast oder welchen Platz du in der Rangliste belegst. Danach kannst du erneut spielen oder die Rangliste ansehen."
                         }
                     ]
+                },
+                {
+                    "titre": "6. Themen zum Freischalten",
+                    "texte": "Deine beste Überlebenszeit schaltet 8 exklusive Themen frei:",
+                    "points": [
+                        "4:00 überlebt: Schach",
+                        "Danach ein neues Thema für jede weitere Minute: Winter (5:00), Wald (6:00), Sterne (7:00), Weihnachten (8:00), Fußball (9:00), Savanne (10:00) und Halloween (11:00)"
+                    ],
+                    "note": "Das freigeschaltete Thema wird am Ende der Runde automatisch angewendet. Du kannst es jederzeit auf der Themen-Seite ändern."
                 }
             ]
         }
@@ -303,5 +312,12 @@
     "difficulte_tres_difficile": "Sehr schwer",
     "dialog_ok": "Verstanden",
     "theme_verrouille_progression": "Dein Level: {{current}} / {{total}}",
-    "chargement": "Wird geladen"
+    "chargement": "Wird geladen",
+    "theme_section_niveaux": "Solo-Modus: alle 50 Level ein Thema",
+    "theme_section_survie": "Überlebensmodus: ein Thema pro überlebter Minute",
+    "theme_survie_record": "Deine beste Überlebenszeit: {{time}}",
+    "theme_survie_verrouille_msg": "Überlebe {{time}} im Überlebensmodus, um dieses Thema freizuschalten!",
+    "theme_survie_progression": "Dein Rekord: {{current}} / {{total}}",
+    "survie_prochain_theme": "Nächstes Thema: überlebe {{time}}",
+    "survie_regle_themes": "Überlebe 4:00 oder länger, um neue Themen freizuschalten"
 }

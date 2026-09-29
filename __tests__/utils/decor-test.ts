@@ -21,8 +21,8 @@ describe('couleurs', () => {
 describe('décors des thèmes', () => {
     const ids = Object.keys(DECORS).map(Number);
 
-    it('existe pour les 8 thèmes', () => {
-        expect([...ids].sort()).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    it('existe pour les 16 thèmes', () => {
+        expect([...ids].sort((a, b) => a - b)).toEqual(Array.from({ length: 16 }, (_, i) => i + 1));
     });
 
     it.each(ids)('thème %i : couleurs hexadécimales valides (utilisables par withAlpha / mix)', (id) => {

@@ -38,6 +38,39 @@ export async function saveScore(attempt: SurvivalAttempt): Promise<number | null
     return rank === -1 ? null : rank + 1;
 }
 
+// Meilleur temps de survie jamais atteint (en secondes) : il débloque les thèmes 9 à 16.
+// Gardé à part du classement, qui trie d'abord par mots trouvés.
+const BEST_KEY = 'survie_meilleur_temps';
+
+export async function loadBestDuration(): Promise<number> {
+    try {
+        const raw = await AsyncStorage.getItem(BEST_KEY);
+        if (raw === null) {
+            // Joueurs d'avant cette fonctionnalité : on repart de la plus longue partie du classement
+            const scores = await loadScores();
+            return scores.reduce((best, s) => Math.max(best, s.duration), 0);
+        }
+        const n = Number(raw);
+        return Number.isFinite(n) ? n : 0;
+    } catch {
+        return 0;
+    }
+}
+
+// Enregistre la durée si c'est un nouveau record ; renvoie { before, after } (ancien et nouveau meilleur temps).
+export async function saveBestDuration(seconds: number): Promise<{ before: number; after: number }> {
+    const before = await loadBestDuration();
+    const after = Math.max(before, Math.floor(seconds));
+    if (after > before) {
+        try {
+            await AsyncStorage.setItem(BEST_KEY, String(after));
+        } catch (e) {
+            console.error('Erreur de sauvegarde du meilleur temps :', e);
+        }
+    }
+    return { before, after };
+}
+
 export const formatTime = (totalSeconds: number) => {
     const s = Math.max(0, Math.ceil(totalSeconds));
     return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;

@@ -13,17 +13,19 @@ import { THEMES } from './themeRegistry';
 interface CardProps {
     plan: number;
     isUnlocked: boolean;
-    reqLevel: number;
+    lockLabel: string;   // condition de déblocage affichée sur la carte verrouillée (« Niv. 50 », « 4:00 »)
+    lockIcon?: string;   // icône accompagnant la condition (chronomètre pour la Survie)
     isSelected: boolean;
     name: string;
     styles: Record<string, any>;
-    handleClick: (plan: number, reqLevel: number) => void;
+    handleClick: () => void;
 }
 
 export default function Card({
     plan,
     isUnlocked,
-    reqLevel,
+    lockLabel,
+    lockIcon,
     isSelected,
     name,
     styles,
@@ -41,7 +43,7 @@ export default function Card({
                 isSelected && styles.selected,
                 pressed && { transform: [{ scale: 0.96 }] },
             ]}
-            onPress={() => handleClick(plan, reqLevel)}
+            onPress={handleClick}
         >
             <ImageBackground
                 source={cardTheme.backgroundImage}
@@ -63,7 +65,10 @@ export default function Card({
                     {!isUnlocked ? (
                         <>
                             <Icon name="lock" size={32} style={styles.lockIcon} />
-                            <Text style={styles.themeName}>Niv. {reqLevel}</Text>
+                            <View style={local.lockRow}>
+                                {lockIcon && <Icon name={lockIcon} size={13} color="#ffffff" />}
+                                <Text style={styles.themeName}>{lockLabel}</Text>
+                            </View>
                         </>
                     ) : (
                         <>
@@ -106,6 +111,11 @@ const local = StyleSheet.create({
         borderRadius: 11,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    lockRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
     },
     lives: {
         flexDirection: 'row',

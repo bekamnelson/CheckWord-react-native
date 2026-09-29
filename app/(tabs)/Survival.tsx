@@ -27,7 +27,8 @@ import listWordEs from './../../JSON/liste_mot_es.json';
 import listWordFr from './../../JSON/liste_mot_fr.json';
 import { ThemePalette, withAlpha } from './../../themes/decor';
 import { tierFor } from './../../utils/difficulty';
-import { formatTime, saveScore } from './../../utils/survivalScores';
+import { formatTime, saveBestDuration, saveScore } from './../../utils/survivalScores';
+import { SURVIVAL_THEMES, survivalThemesUnlockedBetween } from './../../components/themeRegistry';
 
 interface WordEntry {
     word: string;
@@ -57,6 +58,8 @@ interface RunResult {
     wordsFound: number;
     duration: number;
     rank: number | null;
+    unlockedThemes: string[]; // thèmes débloqués par cette partie
+    nextThemeAt: number | null; // meilleur temps à atteindre pour le prochain thème (secondes)
 }
 
 export default function Survival() {
@@ -72,7 +75,7 @@ export default function Survival() {
         return b;
     }, [listWord]);
 
-    const { theme: activeTheme, decor } = useGameTheme();
+    const { theme: activeTheme, decor, setThemeId } = useGameTheme();
     const pal = decor.palette;
     const local = useMemo(() => makeLocal(pal), [pal]);
     const [phase, setPhase] = useState<Phase>('ready');
@@ -174,7 +177,21 @@ export default function Survival() {
             date: Date.now(),
         };
         const rank = await saveScore(attempt);
-        setResult({ id: attempt.id, wordsFound: attempt.wordsFound, duration: attempt.duration, rank });
+
+        // Thèmes débloqués par le meilleur temps de survie (le dernier débloqué est appliqué)
+        const { before, after } = await saveBestDuration(attempt.duration);
+        const unlocked = survivalThemesUnlockedBetween(before, after);
+        if (unlocked.length > 0) await setThemeId(unlocked[unlocked.length - 1].id);
+        const next = SURVIVAL_THEMES.find((th) => th.reqSurvival! > after);
+
+        setResult({
+            id: attempt.id,
+            wordsFound: attempt.wordsFound,
+            duration: attempt.duration,
+            rank,
+            unlockedThemes: unlocked.map((th) => th.name),
+            nextThemeAt: next ? next.reqSurvival! : null,
+        });
         setPhase('over');
 
         // Publicité de fin de partie
@@ -264,6 +281,7 @@ export default function Survival() {
                         <IconText icon="circle-check" iconColor={pal.success} textStyle={local.rule} style={local.ruleRow}>{t('survie_regle_bonus', { s: BONUS_SECONDS })}</IconText>
                         <IconText icon="circle-xmark" iconColor={pal.danger} textStyle={local.rule} style={local.ruleRow}>{t('survie_regle_malus', { s: PENALTY_SECONDS })}</IconText>
                         <IconText icon="arrow-trend-up" iconColor={pal.accent} textStyle={local.rule} style={local.ruleRow}>{t('survie_regle_difficulte')}</IconText>
+                        <IconText icon="palette" iconColor={pal.primary} textStyle={local.rule} style={local.ruleRow}>{t('survie_regle_themes')}</IconText>
                         <Pressable style={local.primaryBtn} onPress={startRun}>
                             <Text style={local.primaryBtnText}>{t('survie_commencer')}</Text>
                         </Pressable>
@@ -346,6 +364,19 @@ export default function Survival() {
                         >
                             {rankLabel(result.rank)}
                         </IconText>
+
+                        {result.unlockedThemes.map((name) => (
+                            <View key={name} style={local.unlockBox}>
+                                <IconText icon="palette" iconColor={pal.primary} textStyle={local.unlockTitle}>
+                                    {t('boite_theme_debloque', { name })}
+                                </IconText>
+                            </View>
+                        ))}
+                        {result.nextThemeAt !== null && (
+                            <IconText icon="lock" iconColor={pal.textMuted} textStyle={local.nextTheme} style={local.nextThemeRow}>
+                                {t('survie_prochain_theme', { time: formatTime(result.nextThemeAt) })}
+                            </IconText>
+                        )}
 
                         <Pressable style={local.primaryBtn} onPress={startRun}>
                             <Text style={local.primaryBtnText}>{t('survie_rejouer')}</Text>
@@ -517,6 +548,28 @@ const makeLocal = (p: ThemePalette) => StyleSheet.create({
         color: p.textMuted,
         fontSize: 12,
         marginTop: 2,
+    },
+    unlockBox: {
+        alignSelf: 'stretch',
+        backgroundColor: withAlpha(p.primary, 0.12),
+        borderWidth: 1,
+        borderColor: withAlpha(p.primary, 0.6),
+        borderRadius: 12,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        marginTop: 12,
+    },
+    unlockTitle: {
+        color: p.primary,
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    nextThemeRow: {
+        marginTop: 10,
+    },
+    nextTheme: {
+        color: p.textMuted,
+        fontSize: 13,
     },
     rank: {
         color: p.text,

@@ -252,4 +252,87 @@ export const DECORS: Record<number, ThemeDecor> = {
             spin: true,
         },
     },
+
+    // ── Thèmes 9 à 16 : débloqués en mode Survie (fonds dans image/plan9 à plan16) ──
+
+    // 9 — Échecs : salle aux chandelles, pièces qui tombent
+    9: {
+        palette: {
+            bg: '#140f0b', overlay: 'rgba(20, 15, 11, 0.55)', panel: 'rgba(28, 20, 14, 0.93)',
+            panelBorder: 'rgba(224, 179, 90, 0.6)', primary: '#e0b35a', onPrimary: '#140f0b', accent: '#f6ecdc',
+            text: '#f6ecdc', textMuted: '#c9b393', success: '#8fce8a', danger: '#e0584a',
+        },
+        icons: { life: 'chess-pawn', lifeColor: '#f6ecdc', corner: 'chess-rook', title: 'chess-knight' },
+        particles: { icons: ['chess-pawn', 'chess-knight', 'chess-queen'], colors: ['#f6ecdc', '#e0b35a'], count: 9, minSize: 10, maxSize: 16, spin: true },
+    },
+    // 10 — Hiver : village enneigé au crépuscule, flocons
+    10: {
+        palette: {
+            bg: '#141a3c', overlay: 'rgba(20, 26, 60, 0.45)', panel: 'rgba(24, 32, 78, 0.88)',
+            panelBorder: 'rgba(188, 212, 255, 0.6)', primary: '#bcd4ff', onPrimary: '#141a3c', accent: '#ffd28a',
+            text: '#f4f7ff', textMuted: '#b8c2e6', success: '#7ee0b0', danger: '#ff6b7a',
+        },
+        icons: { life: 'snowflake', lifeColor: '#e6f0ff', corner: 'snowflake', title: 'mountain' },
+        particles: { icons: ['snowflake'], colors: ['#ffffff', '#e6f0ff', '#bcd4ff'], count: 20, minSize: 8, maxSize: 16, spin: true },
+    },
+    // 11 — Forêt : campement de nuit, lucioles et feuilles
+    11: {
+        palette: {
+            bg: '#0b1a12', overlay: 'rgba(11, 26, 18, 0.5)', panel: 'rgba(14, 32, 22, 0.9)',
+            panelBorder: 'rgba(159, 212, 106, 0.55)', primary: '#9fd46a', onPrimary: '#0b1a12', accent: '#ffc861',
+            text: '#f1f7e8', textMuted: '#b5caa8', success: '#9be07f', danger: '#e8705a',
+        },
+        icons: { life: 'leaf', lifeColor: '#9fd46a', corner: 'tree', title: 'tree' },
+        particles: { icons: ['circle', 'leaf'], colors: ['#fff27a', '#ffc861', '#9fd46a'], count: 14, minSize: 4, maxSize: 12, spin: true },
+    },
+    // 12 — Étoiles : galaxie, planètes et étoiles filantes
+    12: {
+        palette: {
+            bg: '#07061c', overlay: 'rgba(7, 6, 28, 0.4)', panel: 'rgba(14, 10, 42, 0.86)',
+            panelBorder: 'rgba(184, 156, 255, 0.6)', primary: '#b89cff', onPrimary: '#07061c', accent: '#ffb86b',
+            text: '#f3eeff', textMuted: '#aea6d6', success: '#7de3c0', danger: '#ff6f91',
+        },
+        icons: { life: 'star', lifeColor: '#ffd98a', corner: 'star', title: 'user-astronaut' },
+        particles: { icons: ['star', 'meteor', 'circle'], colors: ['#ffffff', '#ffd98a', '#b89cff'], count: 16, minSize: 4, maxSize: 12, spin: false },
+    },
+    // 13 — Noël : marché de Noël, cadeaux et neige
+    13: {
+        palette: {
+            bg: '#1c0b0c', overlay: 'rgba(28, 11, 12, 0.45)', panel: 'rgba(44, 14, 16, 0.92)',
+            panelBorder: 'rgba(240, 192, 82, 0.6)', primary: '#f0c052', onPrimary: '#1c0b0c', accent: '#d8323a',
+            text: '#fff7ec', textMuted: '#dcc3a8', success: '#6fd08c', danger: '#ff5a5a',
+        },
+        icons: { life: 'gift', lifeColor: '#e0443e', corner: 'candy-cane', title: 'sleigh' },
+        particles: { icons: ['snowflake', 'star', 'gift'], colors: ['#ffffff', '#f0c052', '#e0443e'], count: 14, minSize: 8, maxSize: 14, spin: true },
+    },
+    // 14 — Foot : soirée de match, ballons et trophées
+    14: {
+        palette: {
+            bg: '#080d1e', overlay: 'rgba(8, 13, 30, 0.5)', panel: 'rgba(12, 18, 42, 0.92)',
+            panelBorder: 'rgba(47, 123, 255, 0.7)', primary: '#3ddc84', onPrimary: '#06140c', accent: '#f5c542',
+            text: '#f2f6ff', textMuted: '#9fb0d6', success: '#3ddc84', danger: '#ff4f5e',
+        },
+        icons: { life: 'futbol', lifeColor: '#f2f6ff', corner: 'trophy', title: 'futbol' },
+        particles: { icons: ['futbol', 'star', 'trophy'], colors: ['#f2f6ff', '#3ddc84', '#f5c542'], count: 10, minSize: 10, maxSize: 16, spin: true },
+    },
+    // 15 — Savane : safari au coucher de soleil
+    15: {
+        palette: {
+            bg: '#2a1206', overlay: 'rgba(42, 18, 6, 0.45)', panel: 'rgba(52, 24, 10, 0.9)',
+            panelBorder: 'rgba(255, 179, 71, 0.6)', primary: '#ffb347', onPrimary: '#2a1206', accent: '#e0703a',
+            text: '#fff4e4', textMuted: '#e0bb90', success: '#a7d65c', danger: '#ff6a4a',
+        },
+        icons: { life: 'paw', lifeColor: '#ffb347', corner: 'sun', title: 'hippo' },
+        particles: { icons: ['feather', 'leaf'], colors: ['#ffb347', '#e0703a', '#fff4e4'], count: 10, minSize: 10, maxSize: 16, spin: true },
+    },
+    // 16 — Halloween : manoir hanté, fantômes et araignées
+    16: {
+        palette: {
+            bg: '#0d0a1c', overlay: 'rgba(13, 10, 28, 0.5)', panel: 'rgba(22, 14, 38, 0.93)',
+            panelBorder: 'rgba(255, 140, 26, 0.6)', primary: '#ff8c1a', onPrimary: '#0d0a1c', accent: '#9b5cff',
+            text: '#f5eeff', textMuted: '#b3a6d0', success: '#8fe06f', danger: '#ff4d6d',
+        },
+        icons: { life: 'ghost', lifeColor: '#efe6ff', corner: 'spider', title: 'hat-wizard' },
+        particles: { icons: ['ghost', 'spider', 'moon'], colors: ['#efe6ff', '#ff8c1a', '#9b5cff'], count: 10, minSize: 10, maxSize: 16, spin: false },
+    },
 };

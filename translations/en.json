@@ -21,7 +21,7 @@
     "theme_titre": "Theme Shop",
     "theme_niveau": "Level: {{level}}",
     "theme_choisir": "Choose Your Background",
-    "theme_deblocage": "A new theme unlocks every 50 levels!",
+    "theme_deblocage": "Play Solo and Survival mode to unlock 16 themes!",
     "theme_verrouille_titre": "Theme Locked",
     "theme_verrouille_msg": "Reach level {{reqLevel}} to unlock this theme!",
     "vies": "Lives",
@@ -232,6 +232,15 @@
                             "texte": "The game saves your score and tells you whether you set a record or what your position is on the leaderboard. You can then play again or go and see the leaderboard."
                         }
                     ]
+                },
+                {
+                    "titre": "6. Themes to unlock",
+                    "texte": "Your best survival time unlocks 8 exclusive themes:",
+                    "points": [
+                        "4:00 survived: Chess",
+                        "Then a new theme for every extra minute: Winter (5:00), Forest (6:00), Stars (7:00), Christmas (8:00), Football (9:00), Savanna (10:00) and Halloween (11:00)"
+                    ],
+                    "note": "The unlocked theme is applied automatically at the end of the run. You can change it at any time from the Themes page."
                 }
             ]
         }
@@ -303,5 +312,12 @@
     "difficulte_tres_difficile": "Very hard",
     "dialog_ok": "Got it",
     "theme_verrouille_progression": "Your level: {{current}} / {{total}}",
-    "chargement": "Loading"
+    "chargement": "Loading",
+    "theme_section_niveaux": "Solo mode: a theme every 50 levels",
+    "theme_section_survie": "Survival mode: a theme for each minute survived",
+    "theme_survie_record": "Your best survival time: {{time}}",
+    "theme_survie_verrouille_msg": "Survive {{time}} in Survival mode to unlock this theme!",
+    "theme_survie_progression": "Your record: {{current}} / {{total}}",
+    "survie_prochain_theme": "Next theme: survive {{time}}",
+    "survie_regle_themes": "Survive 4:00 or more to unlock new themes"
 }
