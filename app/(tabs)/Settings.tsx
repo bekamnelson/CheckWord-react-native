@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +21,9 @@ import Loader from './../../components/Loader';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import { ThemePalette, withAlpha } from './../../themes/decor';
+
+// Version de l'application, lue dans app.json (champ « version »)
+const APP_VERSION = Constants.expoConfig?.version ?? '1.0.0';
 
 interface PlayerInfo {
     level: number;
@@ -155,7 +159,7 @@ export default function Settings() {
                         <IconText icon="crown" textStyle={styles.appName}>{t('settings_app_name')}</IconText>
                         <View style={styles.versionRow}>
                             <Text style={styles.versionLabel}>{t('settings_version')}</Text>
-                            <Text style={styles.versionValue}>{player.game_version}</Text>
+                            <Text style={styles.versionValue}>{APP_VERSION}</Text>
                         </View>
                         <View style={styles.divider} />
                         <Text style={styles.description}>{t('settings_description')}</Text>
