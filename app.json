@@ -1,8 +1,5 @@
 {
   "expo": {
-    "androidStatusBar": {
-      "hidden": true
-    },
     "name": "CheckWord",
     "slug": "CheckWord",
     "version": "1.0.0",
@@ -10,7 +7,6 @@
     "icon": "./image/icon.png",
     "scheme": "checkword",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
@@ -21,7 +17,6 @@
         "backgroundImage": "./image/icon.png",
         "monochromeImage": "./image/icon.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.stratege123456.checkword",
       "blockedPermissions": [
