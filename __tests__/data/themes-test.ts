@@ -70,34 +70,34 @@ describe('thèmes débloqués par niveau (Solo)', () => {
 });
 
 describe('thèmes débloqués par la Survie', () => {
-    it('à partir de 4:00, puis une minute de plus pour chacun', () => {
-        expect(SURVIVAL_THEMES.map((th) => th.reqSurvival)).toEqual([240, 300, 360, 420, 480, 540, 600, 660]);
+    it('à partir de 5:00, puis un nouveau thème toutes les 2 minutes', () => {
+        expect(SURVIVAL_THEMES.map((th) => th.reqSurvival)).toEqual([300, 420, 540, 660, 780, 900, 1020, 1140]);
         expect(SURVIVAL_THEMES.map((th) => th.name)).toEqual([
             'ÉCHECS', 'HIVER', 'FORÊT', 'ÉTOILES', 'NOËL', 'FOOT', 'SAVANE', 'HALLOWEEN',
         ]);
     });
 
-    it('ne débloque rien sous 4:00', () => {
-        expect(survivalThemesUnlockedBetween(0, 239)).toEqual([]);
+    it('ne débloque rien sous 5:00', () => {
+        expect(survivalThemesUnlockedBetween(0, 299)).toEqual([]);
     });
 
-    it('débloque Échecs à 4:00 pile', () => {
-        expect(survivalThemesUnlockedBetween(0, 240).map((th) => th.name)).toEqual(['ÉCHECS']);
+    it('débloque Échecs à 5:00 pile', () => {
+        expect(survivalThemesUnlockedBetween(0, 300).map((th) => th.name)).toEqual(['ÉCHECS']);
     });
 
     it('débloque plusieurs thèmes d’un coup si le record progresse beaucoup', () => {
-        expect(survivalThemesUnlockedBetween(250, 425).map((th) => th.name)).toEqual(['HIVER', 'FORÊT', 'ÉTOILES']);
+        expect(survivalThemesUnlockedBetween(310, 670).map((th) => th.name)).toEqual(['HIVER', 'FORÊT', 'ÉTOILES']);
     });
 
     it('ne redébloque pas un thème déjà obtenu', () => {
-        expect(survivalThemesUnlockedBetween(300, 330)).toEqual([]);
+        expect(survivalThemesUnlockedBetween(420, 530)).toEqual([]);
     });
 
     it('isThemeUnlocked applique la bonne condition', () => {
         const chess = SURVIVAL_THEMES[0];
         const sakura = LEVEL_THEMES[1];
-        expect(isThemeUnlocked(chess, { level: 999, bestSurvival: 239 })).toBe(false);
-        expect(isThemeUnlocked(chess, { level: 1, bestSurvival: 240 })).toBe(true);
+        expect(isThemeUnlocked(chess, { level: 999, bestSurvival: 299 })).toBe(false);
+        expect(isThemeUnlocked(chess, { level: 1, bestSurvival: 300 })).toBe(true);
         expect(isThemeUnlocked(sakura, { level: 49, bestSurvival: 9999 })).toBe(false);
         expect(isThemeUnlocked(sakura, { level: 50, bestSurvival: 0 })).toBe(true);
     });

@@ -237,8 +237,9 @@
                     "titre": "6. Temas por desbloquear",
                     "texte": "Tu mejor tiempo de supervivencia desbloquea 8 temas exclusivos:",
                     "points": [
-                        "4:00 de supervivencia: Ajedrez",
-                        "Luego un nuevo tema por cada minuto extra: Invierno (5:00), Bosque (6:00), Estrellas (7:00), Navidad (8:00), Fútbol (9:00), Sabana (10:00) y Halloween (11:00)"
+                        "5:00 de supervivencia: Ajedrez",
+                        "Luego un nuevo tema cada 2 minutos: Invierno (7:00), Bosque (9:00), Estrellas (11:00), Navidad (13:00), Fútbol (15:00), Sabana (17:00) y Halloween (19:00)",
+                        "Última oportunidad: cuando se acaba el tiempo, un vídeo corto te devuelve 30 segundos y revela 2 letras de la palabra (una vez por partida)."
                     ],
                     "note": "El tema desbloqueado se aplica automáticamente al final de la partida. Puedes cambiarlo en cualquier momento desde la página Temas."
                 }
@@ -314,10 +315,18 @@
     "theme_verrouille_progression": "Tu nivel: {{current}} / {{total}}",
     "chargement": "Cargando",
     "theme_section_niveaux": "Modo Solo: un tema cada 50 niveles",
-    "theme_section_survie": "Modo Supervivencia: un tema por cada minuto sobrevivido",
+    "theme_section_survie": "Modo Supervivencia: un tema cada 2 minutos sobrevividos",
     "theme_survie_record": "Tu mejor tiempo de supervivencia: {{time}}",
     "theme_survie_verrouille_msg": "¡Sobrevive {{time}} en modo Supervivencia para desbloquear este tema!",
     "theme_survie_progression": "Tu récord: {{current}} / {{total}}",
     "survie_prochain_theme": "Próximo tema: sobrevive {{time}}",
-    "survie_regle_themes": "Sobrevive 4:00 o más para desbloquear nuevos temas"
+    "survie_regle_themes": "Sobrevive 5:00 o más para desbloquear nuevos temas",
+    "chance_titre": "¡Última oportunidad!",
+    "chance_msg": "Mira un vídeo corto para seguir jugando.",
+    "chance_vies": "+{{count}} vidas",
+    "chance_lettres": "{{count}} letras reveladas",
+    "chance_regarder": "Ver el vídeo",
+    "chance_abandonner": "Rendirse",
+    "chance_msg_survie": "¡Se acabó el tiempo! Mira un vídeo corto para seguir jugando.",
+    "chance_secondes": "+{{count}} segundos"
 }

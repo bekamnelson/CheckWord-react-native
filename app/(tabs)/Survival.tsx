@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
+import { AdEventType, InterstitialAd, RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
 
 import DifficultyBadge, { DIFFICULTY_BADGE_SPACE, borderTopOf } from './../../components/DifficultyBadge';
 import { IconText } from './../../components/Icon';
@@ -19,6 +19,8 @@ import Keyboard from './../../components/Keyboard';
 import Letter from './../../components/Letter';
 import Loader from './../../components/Loader';
 import Ornaments from './../../components/Ornaments';
+import SecondChanceModal from './../../components/SecondChanceModal';
+import { useDialog } from './../../contexts/DialogContext';
 import ThemeBackdrop from './../../components/ThemeBackdrop';
 import { useGameTheme } from './../../contexts/GameThemeContext';
 import listWordDe from './../../JSON/liste_mot_de.json';
@@ -44,12 +46,19 @@ const BONUS_SECONDS = 30;
 const PENALTY_SECONDS = 5;
 const LOW_TIME_SECONDS = 20;
 const NEXT_WORD_DELAY_MS = 700;
+// Dernière chance (une fois par partie) : une vidéo contre du temps et des lettres
+const CHANCE_SECONDS = 30;
+const CHANCE_LETTERS = 2;
 
 const IS_CLOSED_TESTING = false;
 const interstitialAdUnitId = (__DEV__ || IS_CLOSED_TESTING)
     ? TestIds.INTERSTITIAL
     : 'ca-app-pub-5542646175321041/9569611051';
 const interstitial = InterstitialAd.createForAdRequest(interstitialAdUnitId);
+const rewardedAdUnitId = (__DEV__ || IS_CLOSED_TESTING)
+    ? TestIds.REWARDED
+    : 'ca-app-pub-5542646175321041/1438900243';
+const rewarded = RewardedAd.createForAdRequest(rewardedAdUnitId);
 
 type Phase = 'ready' | 'playing' | 'over';
 
@@ -76,6 +85,7 @@ export default function Survival() {
     }, [listWord]);
 
     const { theme: activeTheme, decor, setThemeId } = useGameTheme();
+    const { showDialog } = useDialog();
     const pal = decor.palette;
     const local = useMemo(() => makeLocal(pal), [pal]);
     const [phase, setPhase] = useState<Phase>('ready');
@@ -86,6 +96,9 @@ export default function Survival() {
     const [wordsFound, setWordsFound] = useState(0);
     const [result, setResult] = useState<RunResult | null>(null);
     const [flash, setFlash] = useState<{ text: string; good: boolean; key: number } | null>(null);
+    const [chance, setChance] = useState<'available' | 'offered' | 'watching' | 'used'>('available');
+    const chanceRef = useRef<'available' | 'offered' | 'watching' | 'used'>('available');
+    const pausedAtRef = useRef(0); // début de la pause « Dernière chance » (exclue de la durée de survie)
 
     const deadlineRef = useRef(0);
     const startRef = useRef(0);
@@ -113,13 +126,21 @@ export default function Survival() {
         const unsubError = interstitial.addAdEventListener(AdEventType.ERROR, () => {
             adLoadedRef.current = false;
         });
+        const unsubRewardedClosed = rewarded.addAdEventListener(AdEventType.CLOSED, () => rewarded.load());
         interstitial.load();
+        rewarded.load();
         return () => {
             unsubLoaded();
             unsubClosed();
             unsubError();
+            unsubRewardedClosed();
         };
     }, []);
+
+    const setChanceState = (c: 'available' | 'offered' | 'watching' | 'used') => {
+        chanceRef.current = c;
+        setChance(c);
+    };
 
     const stopTimers = () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
@@ -202,7 +223,65 @@ export default function Survival() {
     const tick = () => {
         const remaining = (deadlineRef.current - Date.now()) / 1000;
         setTimeLeft(Math.max(0, remaining));
-        if (remaining <= 0) endRun();
+        if (remaining > 0) return;
+        if (chanceRef.current === 'available') {
+            // Temps écoulé : on fige la partie et on propose la Dernière chance
+            stopTimers();
+            pausedAtRef.current = Date.now();
+            setChanceState('offered');
+        } else if (chanceRef.current === 'used') {
+            endRun();
+        }
+    };
+
+    // Reprend le chrono en ignorant la durée de la pause
+    const resumeAfterPause = (extraSeconds: number) => {
+        const pause = Date.now() - pausedAtRef.current;
+        startRef.current += pause;
+        deadlineRef.current = Date.now() + extraSeconds * 1000;
+        setTimeLeft(extraSeconds);
+        intervalRef.current = setInterval(tick, 200);
+    };
+
+    // Vidéo regardée : +30 s et 2 lettres du mot en cours (sans jamais le terminer)
+    const applyChance = () => {
+        const word = checkWordRef.current;
+        const found = trouveRef.current;
+        const hidden = [...new Set(word.filter((l, i) => found[i] === ''))].sort(() => Math.random() - 0.5);
+        const picked = hidden.slice(0, Math.max(0, Math.min(CHANCE_LETTERS, hidden.length - 1)));
+        const next = found.map((v, i) => (v === '' && picked.includes(word[i]) ? word[i] : v));
+        trouveRef.current = next;
+        setTrouve(next);
+        setChanceState('used');
+        showFlash(`+${CHANCE_SECONDS}s`, true);
+        resumeAfterPause(CHANCE_SECONDS);
+    };
+
+    const handleChanceWatch = () => {
+        if (!rewarded.loaded) {
+            showDialog({ title: t('game_video_indispo_titre'), message: t('game_video_indispo_msg'), icon: 'clapperboard' });
+            rewarded.load();
+            return;
+        }
+        setChanceState('watching');
+        let earned = false;
+        const unsubEarned = rewarded.addAdEventListener(RewardedAdEventType.EARNED_REWARD, () => {
+            earned = true;
+        });
+        const unsubClosed = rewarded.addAdEventListener(AdEventType.CLOSED, () => {
+            unsubEarned();
+            unsubClosed();
+            if (earned) applyChance();
+            else setChanceState('offered'); // vidéo fermée trop tôt : l'offre reste affichée
+        });
+        rewarded.show();
+    };
+
+    const handleChanceGiveUp = () => {
+        if (chanceRef.current !== 'offered') return;
+        startRef.current += Date.now() - pausedAtRef.current; // la pause ne compte pas
+        setChanceState('used');
+        endRun();
     };
 
     const adjustTime = (seconds: number) => {
@@ -214,6 +293,7 @@ export default function Survival() {
         stopTimers();
         usedRef.current.clear();
         endedRef.current = false;
+        setChanceState('available');
         wordsFoundRef.current = 0;
         setWordsFound(0);
         setResult(null);
@@ -226,7 +306,7 @@ export default function Survival() {
     };
 
     const handleLetterClick = (lettre: string) => {
-        if (phase !== 'playing' || busyRef.current || endedRef.current) return;
+        if (phase !== 'playing' || busyRef.current || endedRef.current || chanceRef.current === 'offered' || chanceRef.current === 'watching') return;
 
         const current = trouveRef.current;
         const pos = checkWordRef.current.findIndex((l, i) => l === lettre && current[i] === '');
@@ -393,6 +473,18 @@ export default function Survival() {
                     </View>
                 </View>
             )}
+
+            <SecondChanceModal
+                visible={phase === 'playing' && (chance === 'offered' || chance === 'watching')}
+                paused={chance === 'watching'}
+                message={t('chance_msg_survie')}
+                rewards={[
+                    { icon: 'stopwatch', color: pal.success, label: t('chance_secondes', { count: CHANCE_SECONDS }) },
+                    { icon: 'lightbulb', label: t('chance_lettres', { count: CHANCE_LETTERS }) },
+                ]}
+                onWatch={handleChanceWatch}
+                onGiveUp={handleChanceGiveUp}
+            />
 
             {/* Écran de chargement : s'efface quand la page est prête */}
             <Loader />

@@ -237,8 +237,9 @@
                     "titre": "6. Des thèmes à débloquer",
                     "texte": "Ton meilleur temps de survie débloque 8 thèmes exclusifs :",
                     "points": [
-                        "4:00 de survie : Échecs",
-                        "Puis un nouveau thème à chaque minute supplémentaire : Hiver (5:00), Forêt (6:00), Étoiles (7:00), Noël (8:00), Foot (9:00), Savane (10:00) et Halloween (11:00)"
+                        "5:00 de survie : Échecs",
+                        "Puis un nouveau thème toutes les 2 minutes : Hiver (7:00), Forêt (9:00), Étoiles (11:00), Noël (13:00), Foot (15:00), Savane (17:00) et Halloween (19:00)",
+                        "Dernière chance : quand le temps est écoulé, une courte vidéo te rend 30 secondes et révèle 2 lettres du mot (une fois par partie)."
                     ],
                     "note": "Le thème débloqué est appliqué automatiquement à la fin de la partie. Tu peux en changer à tout moment depuis la page Thèmes."
                 }
@@ -314,10 +315,18 @@
     "theme_verrouille_progression": "Ton niveau : {{current}} / {{total}}",
     "chargement": "Chargement",
     "theme_section_niveaux": "Mode Solo : un thème tous les 50 niveaux",
-    "theme_section_survie": "Mode Survie : un thème par minute de survie",
+    "theme_section_survie": "Mode Survie : un thème toutes les 2 minutes de survie",
     "theme_survie_record": "Ton meilleur temps de survie : {{time}}",
     "theme_survie_verrouille_msg": "Survis {{time}} en mode Survie pour débloquer ce thème !",
     "theme_survie_progression": "Ton record : {{current}} / {{total}}",
     "survie_prochain_theme": "Prochain thème : survis {{time}}",
-    "survie_regle_themes": "Survis 4:00 ou plus pour débloquer de nouveaux thèmes"
+    "survie_regle_themes": "Survis 5:00 ou plus pour débloquer de nouveaux thèmes",
+    "chance_titre": "Dernière chance !",
+    "chance_msg": "Regarde une courte vidéo pour continuer la partie.",
+    "chance_vies": "+{{count}} vies",
+    "chance_lettres": "{{count}} lettres révélées",
+    "chance_regarder": "Regarder la vidéo",
+    "chance_abandonner": "Abandonner",
+    "chance_msg_survie": "Le temps est écoulé ! Regarde une courte vidéo pour continuer la partie.",
+    "chance_secondes": "+{{count}} secondes"
 }

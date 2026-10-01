@@ -32,7 +32,7 @@ export interface ThemeConfig {
 
 // Déblocage des thèmes :
 // - thèmes 1 à 8 : par niveau en Solo (un nouveau thème tous les 50 niveaux)
-// - thèmes 9 à 16 : par le meilleur temps de survie (4:00, puis une minute de plus pour chacun)
+// - thèmes 9 à 16 : par le meilleur temps de survie (5:00, puis un nouveau thème toutes les 2 minutes)
 export interface ThemeUnlock {
     id: number;
     name: string;
@@ -40,8 +40,8 @@ export interface ThemeUnlock {
     reqSurvival?: number; // meilleur temps de survie requis, en secondes
 }
 
-export const SURVIVAL_UNLOCK_START = 4 * 60;
-export const SURVIVAL_UNLOCK_STEP = 60;
+export const SURVIVAL_UNLOCK_START = 5 * 60;
+export const SURVIVAL_UNLOCK_STEP = 2 * 60;
 
 const SURVIVAL_THEME_NAMES: [number, string][] = [
     [9, 'ÉCHECS'],

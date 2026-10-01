@@ -19,6 +19,7 @@ import {
 
 import { useTranslation } from 'react-i18next';
 import AdConfirmModal from './../../components/AdConfirmModal';
+import SecondChanceModal from './../../components/SecondChanceModal';
 import Boite from './../../components/Boite';
 import Icon, { IconText } from './../../components/Icon';
 import DifficultyBadge, { DIFFICULTY_BADGE_SPACE, borderTopOf } from './../../components/DifficultyBadge';
@@ -139,6 +140,8 @@ export default function GameScreen() {
     const [unlockedTheme, setUnlockedTheme] = useState<string | null>(null);
 
     const [adPrompt, setAdPrompt] = useState<AdPromptState>(EMPTY_AD_PROMPT);
+    // « Dernière chance » : proposée une seule fois par mot, juste avant l'écran de défaite
+    const [chance, setChance] = useState<'available' | 'offered' | 'watching' | 'used'>('available');
     const [isInterstitialLoaded, setIsInterstitialLoaded] = useState(false);
 
     // ==========================================
@@ -234,6 +237,7 @@ export default function GameScreen() {
                     setTrouve(Array(currentWord.length).fill(''));
                     setLife([1, 1, 1, 1, 1]);
                     setCountLife(4);
+                    setChance('available');
 
                     const savedPlayer = await AsyncStorage.getItem('player');
                     if (savedPlayer) {
@@ -477,8 +481,59 @@ export default function GameScreen() {
         setCountLife(newCountLife);
 
         if (newCountLife === -1) {
-            handleGameEnd(false);
+            if (chance === 'available' && revealableLetters().length > 0) {
+                setChance('offered');
+            } else {
+                setChance('used');
+                handleGameEnd(false);
+            }
         }
+    };
+
+    // Lettres encore cachées qu'on peut révéler sans terminer le mot à la place du joueur
+    const revealableLetters = () => {
+        const hidden = [...new Set(checkWord.filter((l, i) => trouve[i] === ''))];
+        return hidden.length > 1 ? hidden : [];
+    };
+
+    const SECOND_CHANCE_LIVES = 2;
+    const SECOND_CHANCE_LETTERS = 2;
+
+    // Vidéo regardée jusqu'au bout : 2 vies rendues et 2 lettres révélées (toutes leurs occurrences)
+    const applySecondChance = () => {
+        const pool = revealableLetters().sort(() => Math.random() - 0.5);
+        // On laisse toujours au moins une lettre à trouver
+        const picked = pool.slice(0, Math.min(SECOND_CHANCE_LETTERS, pool.length - 1));
+        setTrouve((prev) => prev.map((v, i) => (v === '' && picked.includes(checkWord[i]) ? checkWord[i] : v)));
+        setLife((prev) => prev.map((_, i) => (i < SECOND_CHANCE_LIVES ? 1 : 0)));
+        setCountLife(SECOND_CHANCE_LIVES - 1);
+        setChance('used');
+    };
+
+    const handleSecondChanceWatch = () => {
+        if (!rewarded.loaded) {
+            showDialog({ title: t('game_video_indispo_titre'), message: t('game_video_indispo_msg'), icon: 'clapperboard' });
+            rewarded.load();
+            return;
+        }
+        setChance('watching');
+        let earned = false;
+        const unsubEarned = rewarded.addAdEventListener(RewardedAdEventType.EARNED_REWARD, () => {
+            earned = true;
+        });
+        const unsubClosed = rewarded.addAdEventListener(AdEventType.CLOSED, () => {
+            unsubEarned();
+            unsubClosed();
+            if (earned) applySecondChance();
+            else setChance('offered'); // vidéo fermée trop tôt : l'offre reste affichée
+        });
+        rewarded.show();
+    };
+
+    const handleSecondChanceGiveUp = () => {
+        if (chance !== 'offered') return;
+        setChance('used');
+        handleGameEnd(false);
     };
 
     const handleReset = async () => {
@@ -493,6 +548,7 @@ export default function GameScreen() {
         setTrouve(Array(newWord.length).fill(''));
         setLife([1, 1, 1, 1, 1]);
         setCountLife(4);
+        setChance('available');
     };
 
     useEffect(() => {
@@ -589,7 +645,18 @@ export default function GameScreen() {
                 </View>
             </ScrollView>
 
-            {isGameOver && <Boite handlereset={handleReset} word={checkWord.join('')} styles={styles} />}
+            {isGameOver && chance === 'used' && <Boite handlereset={handleReset} word={checkWord.join('')} styles={styles} />}
+
+            <SecondChanceModal
+                visible={isGameOver && (chance === 'offered' || chance === 'watching')}
+                paused={chance === 'watching'}
+                rewards={[
+                    { icon: decor.icons.life, color: decor.icons.lifeColor, label: t('chance_vies', { count: SECOND_CHANCE_LIVES }) },
+                    { icon: 'lightbulb', label: t('chance_lettres', { count: SECOND_CHANCE_LETTERS }) },
+                ]}
+                onWatch={handleSecondChanceWatch}
+                onGiveUp={handleSecondChanceGiveUp}
+            />
             {isGameWon && (
                 <Boite
                     haswon={true}

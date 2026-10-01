@@ -237,8 +237,9 @@
                     "titre": "6. Themen zum Freischalten",
                     "texte": "Deine beste Überlebenszeit schaltet 8 exklusive Themen frei:",
                     "points": [
-                        "4:00 überlebt: Schach",
-                        "Danach ein neues Thema für jede weitere Minute: Winter (5:00), Wald (6:00), Sterne (7:00), Weihnachten (8:00), Fußball (9:00), Savanne (10:00) und Halloween (11:00)"
+                        "5:00 überlebt: Schach",
+                        "Danach alle 2 Minuten ein neues Thema: Winter (7:00), Wald (9:00), Sterne (11:00), Weihnachten (13:00), Fußball (15:00), Savanne (17:00) und Halloween (19:00)",
+                        "Letzte Chance: Wenn die Zeit abläuft, gibt dir ein kurzes Video 30 Sekunden zurück und deckt 2 Buchstaben des Wortes auf (einmal pro Runde)."
                     ],
                     "note": "Das freigeschaltete Thema wird am Ende der Runde automatisch angewendet. Du kannst es jederzeit auf der Themen-Seite ändern."
                 }
@@ -314,10 +315,18 @@
     "theme_verrouille_progression": "Dein Level: {{current}} / {{total}}",
     "chargement": "Wird geladen",
     "theme_section_niveaux": "Solo-Modus: alle 50 Level ein Thema",
-    "theme_section_survie": "Überlebensmodus: ein Thema pro überlebter Minute",
+    "theme_section_survie": "Überlebensmodus: alle 2 überlebten Minuten ein Thema",
     "theme_survie_record": "Deine beste Überlebenszeit: {{time}}",
     "theme_survie_verrouille_msg": "Überlebe {{time}} im Überlebensmodus, um dieses Thema freizuschalten!",
     "theme_survie_progression": "Dein Rekord: {{current}} / {{total}}",
     "survie_prochain_theme": "Nächstes Thema: überlebe {{time}}",
-    "survie_regle_themes": "Überlebe 4:00 oder länger, um neue Themen freizuschalten"
+    "survie_regle_themes": "Überlebe 5:00 oder länger, um neue Themen freizuschalten",
+    "chance_titre": "Letzte Chance!",
+    "chance_msg": "Sieh dir ein kurzes Video an, um weiterzuspielen.",
+    "chance_vies": "+{{count}} Leben",
+    "chance_lettres": "{{count}} Buchstaben aufgedeckt",
+    "chance_regarder": "Video ansehen",
+    "chance_abandonner": "Aufgeben",
+    "chance_msg_survie": "Die Zeit ist um! Sieh dir ein kurzes Video an, um weiterzuspielen.",
+    "chance_secondes": "+{{count}} Sekunden"
 }
